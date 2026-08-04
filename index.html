@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家教工具箱</title>
+<style>
+  :root { --bg:#0f0f1a; --card:#1a1a2e; --blue:#4facff; --green:#4ecb7b; --orange:#ff8c42; --purple:#9b6bff; --text:#e0e0e0; --muted:#888; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px; }
+  .header { text-align:center; padding:30px 0 14px; }
+  .header h1 { font-size:1.8em; background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .header p { color:var(--muted); font-size:0.9em; margin-top:6px; }
+  .tools { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; max-width:640px; width:100%; margin:14px 0; }
+  .tool-card { background:var(--card); border-radius:14px; padding:24px 20px; text-decoration:none; color:var(--text); border:1px solid rgba(255,255,255,0.06); transition:all 0.2s; display:block; -webkit-tap-highlight-color:transparent; }
+  .tool-card:active { transform:scale(0.97); }
+  .tool-card .icon { font-size:2.2em; margin-bottom:10px; }
+  .tool-card h3 { font-size:1.1em; margin-bottom:4px; }
+  .tool-card p { font-size:0.85em; color:var(--muted); line-height:1.5; }
+  .tool-card.s1:hover,.tool-card.s1:active { border-color:var(--blue); }
+  .tool-card.s2:hover,.tool-card.s2:active { border-color:var(--green); }
+  .tool-card.s3:hover,.tool-card.s3:active { border-color:var(--purple); }
+  .tip { background:rgba(79,172,255,0.08); border:1px solid rgba(79,172,255,0.2); border-radius:10px; padding:12px 16px; font-size:0.82em; color:var(--muted); text-align:center; max-width:640px; line-height:1.6; }
+  @media(max-width:480px){ .header h1{font-size:1.3em;} .tool-card{padding:18px 14px;} }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>📚 家教工具箱</h1>
+    <p>微信点开即用 · 无需下载</p>
+  </div>
+  <div class="tools">
+    <a class="tool-card s1" href="math_practice.html">
+      <div class="icon">📝</div>
+      <h3>交互练习</h3>
+      <p>集合 + 不等式 · 选择题 · 自动判分</p>
+    </a>
+    <a class="tool-card s2" href="student_review.html">
+      <div class="icon">⭐</div>
+      <h3>课后评价</h3>
+      <p>掌握度 · 专注度 · 薄弱点反馈</p>
+    </a>
+    <a class="tool-card s3" href="parent_summary.html">
+      <div class="icon">📋</div>
+      <h3>课后总结</h3>
+      <p>老师填写 → 生成家长报告 → 一键复制发送</p>
+    </a>
+  </div>
+  <div class="tip">
+    👨‍🏫 <strong>老师入口：</strong>练习 / 评价 / 课后总结 &nbsp;|&nbsp; 📊 <strong>看板：</strong>teacher_dashboard.html
+  </div>
+</body>
+</html>

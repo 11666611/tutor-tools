@@ -17,7 +17,6 @@
   <button class="btn btn-ghost" onclick="importSeed()">📥 导入预设题库</button>
 </div>
 <div class="topics" id="topicBar"></div>
-<div style="display:flex;gap:6px;align-items:center;margin-bottom:16px"><input type="text" id="newTopicInput" placeholder="输入新专题名称，回车确认" style="display:none;padding:7px 14px;border-radius:18px;border:1.5px dashed var(--blue);background:0 0;color:var(--text);font-size:.8em;font-family:inherit;width:200px" onkeydown="if(event.key==='Enter')newTopic()" onblur="this.style.display='none'"></div>
 <div class="info-bar"><span id="topicInfo"></span><span id="qCount"></span></div>
 <div id="qList"></div>
 <div class="form-card" id="formCard">
@@ -108,25 +107,11 @@ function renderTopics(topics){
   topics.forEach(function(t){
     h+='<button class="tbtn'+(t===curTopic?' on':'')+'" onclick="switchTopic(\''+t.replace(/'/g,"\\'")+'\')">'+t+' ('+(bank[t]||[]).length+')</button>';
   });
-  h+='<button class="tbtn tbtn-new" onclick="newTopic()">+ 新建专题</button>';
+  h+='<input type="text" id="newTopicInput" placeholder="+ 新专题名" style="padding:7px 14px;border-radius:18px;border:1.5px dashed var(--border);background:0 0;color:var(--text);font-size:.8em;font-family:inherit;width:120px" onkeydown="if(event.key===\'Enter\'){var v=this.value.trim();if(v){if(bank[v]){alert(\'已存在\');return}bank[v]=[];curTopic=v;this.value=\'\';saveBank()}}">';
   document.getElementById('topicBar').innerHTML=h;
 }
 
 function switchTopic(t){curTopic=t;renderTopics(Object.keys(bank).sort());renderList()}
-
-function newTopic(){
-  var t=document.getElementById('newTopicInput');
-  if(t.style.display==='none'||!t.style.display){
-    t.style.display='inline-block';t.value='';t.focus();return;
-  }
-  var v=t.value.trim();
-  t.style.display='none';t.value='';
-  if(!v)return;
-  if(bank[v]){alert('该专题已存在');return}
-  bank[v]=[];
-  curTopic=v;
-  saveBank();
-}
 
 function renderList(){
   document.getElementById('topicInfo').textContent=curTopic||'请选择专题';

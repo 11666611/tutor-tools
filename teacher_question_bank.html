@@ -17,6 +17,7 @@
   <button class="btn btn-ghost" onclick="importSeed()">📥 导入预设题库</button>
 </div>
 <div class="topics" id="topicBar"></div>
+<div style="display:flex;gap:6px;align-items:center;margin-bottom:16px"><input type="text" id="newTopicInput" placeholder="输入新专题名称，回车确认" style="display:none;padding:7px 14px;border-radius:18px;border:1.5px dashed var(--blue);background:0 0;color:var(--text);font-size:.8em;font-family:inherit;width:200px" onkeydown="if(event.key==='Enter')newTopic()" onblur="this.style.display='none'"></div>
 <div class="info-bar"><span id="topicInfo"></span><span id="qCount"></span></div>
 <div id="qList"></div>
 <div class="form-card" id="formCard">
@@ -114,12 +115,16 @@ function renderTopics(topics){
 function switchTopic(t){curTopic=t;renderTopics(Object.keys(bank).sort());renderList()}
 
 function newTopic(){
-  var t=prompt('输入新专题名称（如：函数、三角函数）：');
-  if(!t||!t.trim())return;
-  t=t.trim();
-  if(bank[t]){alert('该专题已存在');return}
-  bank[t]=[];
-  curTopic=t;
+  var t=document.getElementById('newTopicInput');
+  if(t.style.display==='none'||!t.style.display){
+    t.style.display='inline-block';t.focus();return;
+  }
+  var v=t.value.trim();
+  t.style.display='none';t.value='';
+  if(!v)return;
+  if(bank[v]){alert('该专题已存在');return}
+  bank[v]=[];
+  curTopic=v;
   saveBank();
 }
 

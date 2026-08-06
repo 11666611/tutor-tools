@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>学生工作台</title>
+<style>:root{--bg:#f5f3ef;--card:#ffffff;--primary:#4a7cf7;--accent:#2ecc71;--red:#e74c3c;--orange:#f39c12;--purple:#8e44ad;--text:#2c3e50;--muted:#95a5a6;--border:#e0dcd5;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,.06)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px;position:relative}body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(74,124,247,.04) 0%,transparent 50%),radial-gradient(ellipse at 30% 70%,rgba(142,68,173,.03) 0%,transparent 50%);pointer-events:none;z-index:0}.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto}.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 0 20px}.topbar .user{display:flex;align-items:center;gap:10px}.topbar .avatar{width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.3em;font-weight:700}.topbar .name{font-weight:700;font-size:1.05em}.btn-sm{padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:0 0;color:var(--muted);font-size:.8em;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s}.btn-sm:hover{border-color:var(--primary);color:var(--primary)}.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary)}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow)}.card .c-n{font-size:1.8em;font-weight:800;color:var(--text)}.card .c-l{font-size:.73em;color:var(--muted);margin-top:3px}.section{margin-bottom:22px}.section h3{font-size:.95em;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--text)}.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.action-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 14px;text-decoration:none;color:var(--text);transition:all .15s;text-align:center;display:block;box-shadow:var(--shadow)}.action-card:hover{transform:translateY(-2px);border-color:var(--primary);box-shadow:0 4px 24px rgba(74,124,247,.12)}.action-card .a-icon{font-size:1.8em;margin-bottom:8px}.action-card .a-title{font-weight:700;font-size:.85em}.action-card .a-desc{color:var(--muted);font-size:.7em;margin-top:3px}.rec-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px}.rec-item .r-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px}.rec-item .r-topic{font-weight:600;font-size:.9em}.rec-item .r-score{font-size:1.1em;font-weight:700}.rec-item .r-detail{font-size:.8em;color:var(--muted);margin-top:4px}.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.73em;font-weight:600}.tag-red{background:rgba(231,76,60,.1);color:var(--red)}.tag-green{background:rgba(46,204,113,.1);color:var(--accent)}.tag-blue{background:rgba(74,124,247,.1);color:var(--primary)}.tag-orange{background:rgba(243,156,18,.1);color:var(--orange)}.prog-bar{height:8px;border-radius:4px;background:rgba(0,0,0,.06);margin-top:6px;overflow:hidden}.prog-bar .fill{border-radius:4px;height:100%;transition:width .5s ease}.remedy-q{background:rgba(74,124,247,.05);padding:10px 14px;border-radius:8px;font-size:.82em;margin:4px 0;color:var(--muted);border-left:3px solid var(--primary)}.remedy-q a{color:var(--accent);font-weight:600;text-decoration:none}.empty{text-align:center;padding:36px;color:var(--muted);font-size:.9em}.tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab-btn{padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.82em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;white-space:nowrap}.tab-btn:hover{border-color:var(--primary);color:var(--primary)}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.practice-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;overflow-y:auto}.practice-overlay.show{display:flex;align-items:flex-start;justify-content:center;padding:30px 16px}.practice-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;max-width:680px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.15);margin:auto}.practice-panel h3{font-size:1.1em;margin-bottom:6px;color:var(--text)}.practice-panel .subtitle{font-size:.82em;color:var(--muted);margin-bottom:18px}.practice-q{background:rgba(74,124,247,.04);border:1px solid rgba(74,124,247,.1);border-radius:12px;padding:18px;margin-bottom:12px;position:relative}.practice-q .pq-tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.73em;font-weight:600;margin-bottom:8px}.practice-q .pq-text{font-size:.95em;margin-bottom:12px;line-height:1.6}.practice-q .pq-opts{display:flex;flex-direction:column;gap:6px}.practice-q .pq-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;border:1.5px solid var(--border);font-size:.88em;transition:all .15s;background:rgba(0,0,0,.01)}.practice-q .pq-opt:hover{border-color:var(--primary);background:rgba(74,124,247,.04)}.practice-q .pq-opt.chosen{border-color:var(--primary);background:rgba(74,124,247,.08)}.practice-q .pq-opt.right{border-color:var(--accent)!important;background:rgba(46,204,113,.08)!important}.practice-q .pq-opt.wrong{border-color:var(--red)!important;background:rgba(231,76,60,.08)!important}.practice-q .pq-cir{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8em;background:rgba(0,0,0,.06);flex-shrink:0}.practice-q .pq-opt.right .pq-cir{background:var(--accent);color:#000}.practice-q .pq-opt.wrong .pq-cir{background:var(--red);color:#fff}.practice-q .pq-fb{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.84em;display:none;line-height:1.5}.practice-q .pq-fb.show{display:block}.practice-q .pq-fb.good{background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);color:var(--accent)}.practice-q .pq-fb.bad{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.2);color:var(--red)}.practice-score{text-align:center;padding:20px;margin-top:16px;background:rgba(74,124,247,.04);border-radius:12px;display:none}.practice-score.show{display:block}.practice-score .ps-big{font-size:2.5em;font-weight:800}.btn-close{position:absolute;top:10px;right:14px;background:0 0;border:none;color:var(--muted);font-size:1.4em;cursor:pointer;padding:4px 8px}.btn-close:hover{color:var(--text)}.mistake-stats{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}.mstat{flex:1;min-width:60px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center}.mstat .m-n{font-size:1.4em;font-weight:800}.mstat .m-l{font-size:.68em;color:var(--muted);margin-top:2px}.filter-tags{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}.ftag{padding:6px 14px;border-radius:16px;cursor:pointer;font-size:.78em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.ftag:hover{border-color:var(--primary);color:var(--primary)}.ftag.on{background:var(--primary);color:#fff;border-color:var(--primary)}.mistake-group{margin-bottom:16px}.mistake-group .mg-title{font-size:.9em;font-weight:700;color:var(--red);margin-bottom:6px;display:flex;align-items:center;gap:6px}.mistake-card{background:rgba(231,76,60,.04);border:1px solid rgba(231,76,60,.12);border-radius:10px;padding:14px;margin-bottom:8px;position:relative}.mistake-card .mc-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px}.mistake-card .mc-date{font-size:.75em;color:var(--muted)}.mistake-card .mc-q{font-size:.9em;line-height:1.6;margin-bottom:10px}.mistake-card .mc-answers{margin-bottom:8px;font-size:.85em;line-height:1.5}.mistake-card .mc-wrong{color:var(--red)}.mistake-card .mc-right{color:var(--accent)}.mistake-card .mc-actions{display:flex;gap:8px;flex-wrap:wrap}.rbtn{padding:5px 14px;border-radius:14px;cursor:pointer;font-size:.75em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.rbtn:hover{border-color:var(--primary);color:var(--primary)}.rbtn.on-mastered{background:rgba(46,204,113,.1);border-color:var(--accent);color:var(--accent)}.rbtn.on-retry{background:rgba(243,156,18,.1);border-color:var(--orange);color:var(--orange)}.mistake-empty{text-align:center;padding:40px 20px;color:var(--muted)}.mistake-empty .me-icon{font-size:3em;margin-bottom:10px}@media(max-width:480px){.quick-actions{grid-template-columns:1fr 1fr}.cards{grid-template-columns:repeat(2,1fr)}.tabs{flex-wrap:wrap;gap:3px}.tab-btn{padding:7px 10px;font-size:.76em}.practice-panel{padding:18px 14px}.practice-q{padding:14px}.mistake-card{padding:12px}}</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar"><div class="user"><div class="avatar">🎓</div><div class="name" id="uname"></div></div><button class="btn-sm" onclick="logout()">退出</button></div>
+<div class="cards" id="sc"></div>
+<div class="section"><h3>🚀 快速入口</h3><div class="quick-actions"><a class="action-card" href="math_practice.html"><div class="a-icon">📐</div><div class="a-title">高中练习</div><div class="a-desc">做题 · 自动提交</div></a><a class="action-card" href="student_review.html"><div class="a-icon">⭐</div><div class="a-title">课后评价</div><div class="a-desc">上完课填评价</div></a><a class="action-card" href="#" onclick="openPractice(true);return false" style="border-color:rgba(243,156,18,.25)"><div class="a-icon">🔄</div><div class="a-title">错题巩固</div><div class="a-desc">错题对应例题练习</div></a><a class="action-card" href="#" onclick="genReview()" style="border-color:rgba(142,68,173,.25)"><div class="a-icon">📊</div><div class="a-title">复习推荐</div><div class="a-desc">AI推荐复习方向</div></a></div></div>
+
+<div class="tabs"><button class="tab-btn active" onclick="switchTab('mastery',this)">📈 掌握度</button><button class="tab-btn" onclick="switchTab('history',this)">📝 练习记录</button><button class="tab-btn" onclick="switchTab('weak',this)">📌 薄弱巩固</button><button class="tab-btn" onclick="switchTab('mistake',this)">📒 错题本</button></div>
+
+<div id="tab-mastery"><div id="masteryContent"></div></div>
+<div id="tab-history" style="display:none"><div id="qh"></div></div>
+<div id="tab-weak" style="display:none"><div id="wa"></div></div>
+<div id="tab-mistake" style="display:none"><div id="mistakeContent"></div></div>
+
+<div class="section" style="margin-top:20px"><h3>⭐ 最近评价</h3><div id="eh"></div></div></div>
+
+<!-- 错题巩固 Practice Overlay -->
+<div class="practice-overlay" id="practiceOverlay">
+<div class="practice-panel" style="position:relative">
+<button class="btn-close" onclick="closePractice()">✕</button>
+<h3>🔄 错题巩固</h3>
+<div class="subtitle" id="practiceSubtitle">根据你的薄弱点，生成针对性例题</div>
+<div id="practiceContent"></div>
+<div class="practice-score" id="practiceScore">
+<div class="ps-big" id="psBig"></div>
+<div id="psMsg" style="color:var(--muted);margin-top:6px"></div>
+<button class="btn btn-primary" style="margin-top:14px" onclick="closePractice()">完成</button>
+</div>
+</div>
+</div>
+
+<script>
+var BLOB='https://jsonblob.com/api/jsonBlob/019fd2b7-4376-7e01-aad8-0390e6b2fbce'
+var name=localStorage.getItem('ws_name')||'学生';var role=localStorage.getItem('ws_role');if(role!=='student')location.href='index.html';document.getElementById('uname').textContent=name;
+// 错题巩固题库：每个知识点对应多道交互式例题
+var remedyBank={
+'空集的定义与判定':[
+{q:'下列集合中，是空集的是？',opts:['{x|x²+2=0,x∈R}','{0}','{x|x>0,x∈R}','{∅}'],ans:0,exp:'x²+2=0 在实数范围内无解，该集合没有元素，是空集 ∅。{0}、{∅} 都含有一个元素。'},
+{q:'集合 {x∈R|x²+x+1=0} 是？',opts:['单元素集','双元素集','空集','无限集'],ans:2,exp:'判别式 Δ=1-4=-3<0，方程无实数根，是空集。'},
+],
+'空集的性质':[
+{q:'下列命题正确的个数是？①∅⊆{0} ②∅∈{0} ③∅⊆∅ ④{0}=∅',opts:['1','2','3','4'],ans:1,exp:'①空集是任何集合的子集，正确。②∅是集合不是元素，错误。③空集是自身的子集，正确。共2个正确。'},
+{q:'关于空集，下列错误的是？',opts:['∅⊆{1,2}','∅∈{∅}','∅⊆∅','∅∈{1,2}'],ans:3,exp:'∅是集合，不能作为元素属于{1,2}。但∅∈{∅}正确，因为{∅}以空集为元素。'},
+],
+'子集个数公式·2ⁿ':[
+{q:'集合{1,2,3,4,5}的子集共有多少个？',opts:['16','32','64','10'],ans:1,exp:'含5个元素，子集数=2⁵=32个。'},
+{q:'集合{a,b,c}的子集共有？',opts:['6','7','8','9'],ans:2,exp:'3个元素，子集数=2³=8个。'},
+],
+'真子集个数·2ⁿ-1':[
+{q:'集合{a,b,c,d}的真子集个数为？',opts:['14','15','16','8'],ans:1,exp:'4个元素，真子集=2⁴-1=15个（去掉自身）。'},
+{q:'集合{1,2}的真子集有几个？',opts:['2','3','4','1'],ans:1,exp:'真子集=2²-1=3个：∅、{1}、{2}。{1,2}是子集但不是真子集。'},
+],
+'元素与集合、集合与集合关系':[
+{q:'设A={0,{1}}，判断：0∈A，{0}⊆A，∅⊆A，{{1}}⊆A 中正确的个数？',opts:['1','2','3','4'],ans:2,exp:'0∈A✓（0是A的元素）；{0}⊆A✓（0在A中）；∅⊆A✓（空集是任何集合的子集）；{{1}}⊆A✓（{1}在A中）。4个全对。'},
+{q:'已知A={1,2,3}，下列正确的是？',opts:['1⊆A','{1}∈A','1∈A','{1,2}∈A'],ans:2,exp:'1是元素，用∈；{1}是集合，用⊆。所以1∈A正确。'},
+],
+'满足条件的集合个数':[
+{q:'满足{a}⊆M⊊{a,b,c,d}的集合M有几个？',opts:['6','7','8','15'],ans:1,exp:'M必须含a，且是{a,b,c,d}的真子集。相当于{b,c,d}的任意子集（8个）加上a，其中去掉{a,b,c,d}自身。即8-1=7个。'},
+{q:'满足{1}⊆M⊆{1,2,3,4}的集合M有几个？',opts:['8','4','7','16'],ans:0,exp:'M必须含1，可以从{2,3,4}中任选子集加入，共2³=8个。'},
+],
+'集合相等·求参数':[
+{q:'设A={1,a,b}，B={a,a²,ab}，且A=B，求a²⁰²⁵+b²⁰²⁵。',opts:['-1','0','1','2'],ans:0,exp:'由互异性a≠1。①若a²=1⇒a=-1，A={1,-1,b}，B={-1,1,-b}，对比得b=-b⇒b=0。所以a²⁰²⁵+b²⁰²⁵=(-1)²⁰²⁵+0=-1。②若ab=1，代入检验不符合互异性。故答案为-1。'},
+{q:'已知A={x|ax²+2x+1=0}是单元素集，求a。',opts:['0','1','0或1','-1'],ans:2,exp:'a=0时是一次方程2x+1=0⇒x=-1/2，单元素✓。a≠0时需Δ=4-4a=0⇒a=1。所以a=0或1。'},
+],
+'含参集合为空集':[
+{q:'A={x|ax²+ax+1=0}=∅，求a的取值范围。',opts:['0≤a<4','0<a<4','0≤a≤4','a<0或a>4'],ans:0,exp:'a=0时1=0无解，A=∅，a=0可。a≠0时需Δ=a²-4a<0⇒0<a<4。综合0≤a<4。'},
+],
+'无限集合关系·数轴法求参':[
+{q:'A={x|x<2或x>5}，B={x|x≤a}，若A∪B=R，求a的取值范围。',opts:['a≥5','a≥2','a≤5','a≤2'],ans:0,exp:'画数轴，A缺少[2,5]区间，需B覆盖。B={x≤a}要覆盖到5，所以a≥5。'},
+],
+'综合·集合关系+子集个数':[
+{q:'A={x∈Z|-3≤x<4}，求A的非空真子集个数。',opts:['126','127','128','14'],ans:0,exp:'A={-3,-2,-1,0,1,2,3}共7个元素，非空真子集=2⁷-2=128-2=126。'},
+],
+};
+
+// 根据tag模糊匹配remedyBank中的key
+function findRemedy(tag){
+  if(remedyBank[tag]) return remedyBank[tag];
+  var keys=Object.keys(remedyBank);
+  for(var i=0;i<keys.length;i++){
+    if(tag.indexOf(keys[i])>=0||keys[i].indexOf(tag)>=0) return remedyBank[keys[i]];
+  }
+  // Fallback: 泛例题
+  return [{q:'关于"'+tag+'"的例题：请回顾相关概念，重点理解定义和典型题型。',opts:['已理解','还需复习'],ans:0,exp:'建议回顾课本对应章节，重做错题。'}];
+}
+
+// 错题巩固 state
+var practiceState={questions:[],answers:{},finished:false};
+
+window.openPractice=function(fromWeak){
+  // 从云端获取错题数据
+  fetch(BLOB).then(function(r){return r.json()}).then(function(d){
+    var items=d.items||[];
+    var qi=items.filter(function(e){return e.type==='quiz'&&e.studentName===name});
+    var wt={};qi.forEach(function(q){if(!q.wrongDetails)return;q.wrongDetails.forEach(function(w){var t=w.tag||'其他';wt[t]=(wt[t]||0)+1})});
+    var sw=Object.keys(wt).sort(function(a,b){return wt[b]-wt[a]});
+    // 为每个薄弱知识点取例题
+    var allQs=[];
+    sw.forEach(function(tag){
+      var qs=findRemedy(tag);
+      // 最多每个知识点取2题
+      qs.slice(0,2).forEach(function(q,i){
+        allQs.push({tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i});
+      });
+    });
+    // 如果没有错题，给出提示
+    if(!allQs.length){
+      allQs.push({tag:'通用',text:'暂无错题记录！多做练习，系统会自动收集错题并为你生成巩固练习。',opts:['知道了'],ans:0,exp:'建议去练习页面做题，交卷后错题会自动记录。',id:'rm_none'});
+    }
+    practiceState={questions:allQs,answers:{},finished:false};
+    document.getElementById('practiceSubtitle').textContent=fromWeak?'根据薄弱知识点生成 '+allQs.length+' 道例题':'共 '+allQs.length+' 道巩固题，认真作答哦';
+    document.getElementById('practiceScore').classList.remove('show');
+    renderPractice();
+    document.getElementById('practiceOverlay').classList.add('show');
+    document.body.style.overflow='hidden';
+  }).catch(function(){
+    alert('加载失败，请检查网络后重试');
+  });
+};
+
+window.closePractice=function(){
+  document.getElementById('practiceOverlay').classList.remove('show');
+  document.body.style.overflow='';
+  refresh(); // 刷新主面板
+};
+
+function renderPractice(){
+  var qs=practiceState.questions;
+  var ans=practiceState.answers;
+  var html='';
+  qs.forEach(function(q,i){
+    var answered=ans[q.id]!==undefined;
+    var isRight=ans[q.id]===q.ans;
+    html+='<div class="practice-q">';
+    html+='<span class="pq-tag tag tag-orange">'+(q.tag||'例题')+'</span>';
+    html+='<div class="pq-text"><b>第'+(i+1)+'题.</b> '+q.text+'</div>';
+    if(q.opts.length>1){
+      html+='<div class="pq-opts">'+q.opts.map(function(o,j){
+        var cls='';
+        if(answered){
+          if(j===q.ans) cls=' right';
+          else if(j===ans[q.id]&&!isRight) cls=' wrong';
+        }else if(ans[q.id]===j) cls=' chosen';
+        return '<div class="pq-opt'+cls+'" data-i="'+i+'" data-j="'+j+'" '+(answered?'style="pointer-events:none"':'')+'><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>';
+      }).join('')+'</div>';
+    }else{
+      html+='<button class="btn btn-sm" style="margin-top:8px" onclick="markDone(\''+q.id+'\')">'+q.opts[0]+'</button>';
+    }
+    html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 正确答案是 <b>'+'ABCD'[q.ans]+'</b>')+'<br>'+q.exp:'')+'</div>';
+    html+='</div>';
+  });
+  document.getElementById('practiceContent').innerHTML=html;
+  // bind clicks
+  document.querySelectorAll('.pq-opt').forEach(function(el){
+    el.addEventListener('click',function(){
+      var i=parseInt(el.dataset.i),j=parseInt(el.dataset.j);
+      if(practiceState.answers[practiceState.questions[i].id]!==undefined) return;
+      practiceState.answers[practiceState.questions[i].id]=j;
+      renderPractice();
+      checkPracticeDone();
+    });
+  });
+}
+
+window.markDone=function(id){
+  practiceState.answers[id]=-1;
+  renderPractice();
+  checkPracticeDone();
+};
+
+function checkPracticeDone(){
+  var qs=practiceState.questions;
+  var allDone=qs.every(function(q){return practiceState.answers[q.id]!==undefined});
+  if(!allDone||practiceState.finished) return;
+  practiceState.finished=true;
+  var correct=0,total=0;
+  qs.forEach(function(q){
+    if(q.opts.length>1){total++;if(practiceState.answers[q.id]===q.ans) correct++;}
+  });
+  var pct=total?Math.round(correct/total*100):0;
+  document.getElementById('psBig').innerHTML='<span style="color:'+(pct>=80?'var(--accent)':pct>=60?'var(--orange)':'var(--red)')+'">'+correct+'</span> / '+total;
+  document.getElementById('psMsg').textContent=pct>=80?'巩固效果很好！继续保持！':pct>=60?'还有提升空间，建议再次复习。':'需要重点回顾，别灰心！';
+  document.getElementById('practiceScore').classList.add('show');
+  document.getElementById('practiceScore').scrollIntoView({behavior:'smooth'});
+}
+
+function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],ok=ua===q.ans;html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+(q.tag||'例题')+'</span><div class="pq-text">'+q.text+'</div><div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>'}).join('')+'</div><div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+q.exp+'</div></div>'});return html}
+// ========== 错题本 ==========
+var mistakeFilter='全部';
+var REVIEW_KEY='mistake_review';
+
+function getReviewStatus(){try{return JSON.parse(localStorage.getItem(REVIEW_KEY+'_'+name)||'{}')}catch(e){return{}}}
+function setReviewStatus(id,status){var s=getReviewStatus();s[id]=status;localStorage.setItem(REVIEW_KEY+'_'+name,JSON.stringify(s))}
+function makeMistakeId(qDate,tag,qText){return (qDate+'_'+tag+'_'+qText).replace(/[^a-zA-Z0-9一-鿿]/g,'').substring(0,40)}
+
+window.renderMistakeNotebook=function(){
+  fetch(BLOB).then(function(r){return r.json()}).then(function(d){
+    var items=d.items||[];
+    var qi=items.filter(function(e){return e.type==='quiz'&&e.studentName===name});
+    // 收集所有错题
+    var allMistakes=[];
+    qi.forEach(function(q){
+      if(!q.wrongDetails||!q.wrongDetails.length) return;
+      q.wrongDetails.forEach(function(w){
+        allMistakes.push({
+          date:q.date, topic:q.topic||'—', tag:w.tag||'其他',
+          text:w.text, userAnswer:w.userAnswer, correctAnswer:w.correctAnswer,
+          id:makeMistakeId(q.date,w.tag||'其他',w.text)
+        });
+      });
+    });
+    // 按日期倒序
+    allMistakes.sort(function(a,b){return b.date.localeCompare(a.date)});
+    var statuses=getReviewStatus();
+
+    // 统计
+    var totalW=allMistakes.length;
+    var mastered=0,retry=0;
+    allMistakes.forEach(function(m){if(statuses[m.id]==='mastered')mastered++;else if(statuses[m.id]==='retry')retry++});
+    var unreviewed=totalW-mastered-retry;
+
+    // 收集所有标签
+    var allTags=[];
+    var seen={};
+    allMistakes.forEach(function(m){if(!seen[m.tag]){seen[m.tag]=1;allTags.push(m.tag)}});
+
+    // 筛选
+    var filtered=mistakeFilter==='全部'?allMistakes:allMistakes.filter(function(m){return m.tag===mistakeFilter});
+
+    // 分组
+    var groups={};
+    filtered.forEach(function(m){
+      if(!groups[m.tag]) groups[m.tag]=[];
+      groups[m.tag].push(m);
+    });
+
+    // 渲染统计栏
+    var html='<div class="mistake-stats">';
+    html+='<div class="mstat"><div class="m-n" style="color:var(--red)">'+totalW+'</div><div class="m-l">总错题</div></div>';
+    html+='<div class="mstat"><div class="m-n" style="color:var(--accent)">'+mastered+'</div><div class="m-l">已掌握</div></div>';
+    html+='<div class="mstat"><div class="m-n" style="color:var(--orange)">'+retry+'</div><div class="m-l">需再练</div></div>';
+    html+='<div class="mstat"><div class="m-n" style="color:var(--muted)">'+unreviewed+'</div><div class="m-l">未复习</div></div>';
+    if(totalW>0){var rpct=Math.round((mastered+retry)/totalW*100);html+='<div class="mstat"><div class="m-n" style="color:var(--purple)">'+rpct+'%</div><div class="m-l">复习进度</div></div>'}
+    html+='</div>';
+
+    // 筛选标签
+    if(allTags.length>1){
+      html+='<div class="filter-tags">';
+      html+='<button class="ftag'+(mistakeFilter==='全部'?' on':'')+'" onclick="setMistakeFilter(\'全部\')">全部</button>';
+      allTags.forEach(function(t){
+        html+='<button class="ftag'+(mistakeFilter===t?' on':'')+'" onclick="setMistakeFilter(\''+t.replace(/'/g,"\\'")+'\')">'+t+'</button>';
+      });
+      html+='</div>';
+    }
+
+    // 渲染错题
+    if(!filtered.length){
+      html+='<div class="mistake-empty"><div class="me-icon">🎉</div><div>'+ (totalW===0?'还没有错题记录！继续保持！':'该筛选条件下没有错题')+'</div></div>';
+    }else{
+      var groupKeys=Object.keys(groups);
+      groupKeys.forEach(function(tag){
+        html+='<div class="mistake-group"><div class="mg-title">⚠ '+tag+' <span style="font-weight:400;font-size:.8em;color:var(--muted)">（'+groups[tag].length+'题）</span></div>';
+        groups[tag].forEach(function(m){
+          var st=statuses[m.id]||'';
+          html+='<div class="mistake-card">';
+          html+='<div class="mc-meta"><span class="tag tag-red">'+m.tag+'</span><span class="mc-date">📅 '+m.date+' · '+m.topic+'</span></div>';
+          html+='<div class="mc-q">'+m.text+'</div>';
+          html+='<div class="mc-answers"><div class="mc-wrong">❌ 你的答案：'+m.userAnswer+'</div><div class="mc-right">✅ 正确答案：'+m.correctAnswer+'</div></div>';
+          html+='<div class="mc-actions">';
+          html+='<button class="rbtn'+(st==='mastered'?' on-mastered':'')+'" onclick="markReview(\''+m.id+'\',\'mastered\')">✅ 已掌握</button>';
+          html+='<button class="rbtn'+(st==='retry'?' on-retry':'')+'" onclick="markReview(\''+m.id+'\',\'retry\')">🔁 需再练</button>';
+          html+='</div></div>';
+        });
+        // 每组底部的巩固入口
+        html+='<div style="margin-top:4px;margin-bottom:12px"><button class="btn btn-sm" style="color:var(--accent);border-color:var(--accent)" onclick="openPracticeForTag(\''+tag.replace(/'/g,"\\'")+'\')">📝 练「'+tag+'」例题</button></div>';
+        html+='</div>';
+      });
+    }
+    document.getElementById('mistakeContent').innerHTML=html;
+  }).catch(function(){document.getElementById('mistakeContent').innerHTML='<div class="mistake-empty"><div class="me-icon">⚠</div><div>加载失败，请检查网络</div></div>'});
+};
+
+window.setMistakeFilter=function(t){
+  mistakeFilter=t;
+  renderMistakeNotebook();
+};
+
+window.markReview=function(id,status){
+  var s=getReviewStatus();
+  if(s[id]===status){delete s[id];setReviewStatus(id,'');} // toggle off
+  else setReviewStatus(id,status);
+  renderMistakeNotebook();
+};
+
+// 从错题本直接打开特定知识点的巩固练习
+window.openPracticeForTag=function(tag){
+  var qs=findRemedy(tag);
+  var allQs=qs.slice(0,2).map(function(q,i){
+    return {tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_tag_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i};
+  });
+  practiceState={questions:allQs,answers:{},finished:false};
+  document.getElementById('practiceSubtitle').textContent='针对「'+tag+'」生成 '+allQs.length+' 道例题';
+  document.getElementById('practiceScore').classList.remove('show');
+  renderPractice();
+  document.getElementById('practiceOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+};
+
+var currentTab='mastery';
+function switchTab(t,el){currentTab=t;document.querySelectorAll('.tabs .tab-btn').forEach(function(b){b.classList.remove('active')});el.classList.add('active');['mastery','history','weak','mistake'].forEach(function(id){document.getElementById('tab-'+id).style.display=id===t?'':'none'});if(t==='mistake')renderMistakeNotebook()}
+
+function refresh(){fetch(BLOB).then(function(r){return r.json()}).then(function(d){var items=d.items||[];localStorage.setItem("tutor_data_backup",JSON.stringify(d));var qi=items.filter(function(e){return e.type==='quiz'&&e.studentName===name});var ei=items.filter(function(e){return e.type==='eval'&&e.studentName===name});var avg=qi.length?Math.round(qi.reduce(function(s,e){return s+e.pct},0)/qi.length):null;var wt={},topics={};qi.forEach(function(q){var tk=q.topic||'其他';if(!topics[tk])topics[tk]={total:0,correct:0};topics[tk].total++;if(!q.wrongDetails||!q.wrongDetails.length)topics[tk].correct++;if(q.wrongDetails)q.wrongDetails.forEach(function(w){var t=w.tag||'其他';wt[t]=(wt[t]||0)+1})});var lastQi=qi.slice(-1)[0];var trend=qi.length>=2?(qi[0].pct-(qi[1]?qi[1].pct:qi[0].pct)):0;
+
+// Stats cards
+document.getElementById('sc').innerHTML='<div class="card"><div class="c-l">练习次数</div><div class="c-n" style="color:var(--primary)">'+qi.length+'</div></div><div class="card"><div class="c-l">练习均分</div><div class="c-n" style="color:'+(avg!==null&&avg>=70?'var(--accent)':'var(--orange)')+'">'+(avg!==null?avg+'%':'—')+'</div></div><div class="card"><div class="c-l">掌握知识点</div><div class="c-n" style="color:var(--accent)">'+Object.keys(topics).filter(function(k){return topics[k].correct===topics[k].total}).length+'</div></div><div class="card"><div class="c-l">薄弱点数</div><div class="c-n" style="color:var(--red)">'+Object.keys(wt).length+'</div></div>'+(trend!==0?'<div class="card"><div class="c-l">最近趋势</div><div class="c-n" style="color:'+(trend>0?'var(--accent)':'var(--red)')+'">'+(trend>0?'↑':'↓')+Math.abs(trend)+'%</div></div>':'');
+
+// Mastery tab
+var mk=Object.keys(topics).sort();var mhtml='<div class="rec-item" style="padding:20px"><div style="font-weight:700;margin-bottom:16px">📈 各专题掌握情况</div>';
+if(!mk.length)mhtml+='<div class="empty">还没有练习记录</div>';
+else mk.forEach(function(k){var t=topics[k],pct=Math.round(t.correct/t.total*100);var c=pct>=80?'var(--accent)':pct>=60?'var(--orange)':'var(--red)';mhtml+='<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:.88em;margin-bottom:4px"><span>'+k+'</span><span style="color:'+c+';font-weight:700">'+pct+'% ('+t.correct+'/'+t.total+')</span></div><div class="prog-bar"><div class="fill" style="width:'+pct+'%;background:'+c+'"></div></div></div>'});
+mhtml+='</div>';
+// Learning tips
+if(avg!==null&&avg<60)mhtml+='<div style="background:rgba(231,76,60,.05);border:1px solid rgba(231,76,60,.12);border-radius:12px;padding:16px;margin-top:12px"><strong style="color:var(--red)">💡 学习建议</strong><p style="font-size:.85em;color:var(--muted);margin-top:6px;line-height:1.7">你的练习均分偏低。建议先回顾课本基础概念，从简单题开始建立信心，每做完一道题仔细看解析，理解后再做下一道。</p></div>';
+else if(avg!==null&&avg<80)mhtml+='<div style="background:rgba(243,156,18,.05);border:1px solid rgba(243,156,18,.12);border-radius:12px;padding:16px;margin-top:12px"><strong style="color:var(--orange)">💡 学习建议</strong><p style="font-size:.85em;color:var(--muted);margin-top:6px;line-height:1.7">基础不错，但还有提升空间。重点关注薄弱知识点，每次练习后认真分析错题原因，针对性地做同类题巩固。</p></div>';
+else if(avg!==null)mhtml+='<div style="background:rgba(46,204,113,.05);border:1px solid rgba(46,204,113,.12);border-radius:12px;padding:16px;margin-top:12px"><strong style="color:var(--accent)">💡 学习建议</strong><p style="font-size:.85em;color:var(--muted);margin-top:6px;line-height:1.7">掌握得很好！可以挑战更高难度的综合题和压轴题，多尝试一题多解，培养数学思维深度。</p></div>';
+document.getElementById('masteryContent').innerHTML=mhtml;
+
+// History tab
+document.getElementById('qh').innerHTML=qi.length?qi.map(function(q){var g=q.pct>=90?'🟢':q.pct>=70?'🟡':'🔴';return'<div class="rec-item"><div class="r-top"><span class="r-topic">'+g+' '+(q.topic||'—')+'</span><span class="r-score" style="color:'+(q.pct>=70?'var(--accent)':'var(--red)')+'">'+q.pct+'%</span></div><div class="r-detail">'+q.date+' · '+q.correct+'/'+q.total+'正确'+(q.wrongDetails?q.wrongDetails.map(function(w){return' <span class="tag tag-red">'+w.tag+'</span>'}).join(''):' ✅ 全对')+'</div></div>'}).join(''):'<div class="empty">还没有练习记录</div>';
+
+// Weak tab
+var sw=Object.keys(wt).sort(function(a,b){return wt[b]-wt[a]}).slice(0,8);
+document.getElementById('wa').innerHTML=sw.length?sw.map(function(t){return'<div class="rec-item"><div style="font-weight:700;color:var(--red);margin-bottom:8px">⚠ '+t+'（错'+wt[t]+'次）</div>'+(findRemedy(t)?findRemedy(t).slice(0,1).map(function(rq){return'<div class="remedy-q">📝 <a href="#" onclick="openPractice(true);return false">'+rq.q+'</a></div>'}).join(''):'<div class="remedy-q">请老师布置针对性练习</div>')+'</div>'}).join('')+'<div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="openPractice(true)">🔄 开始错题巩固练习</button></div>':'<div class="empty">暂无薄弱点，继续保持！<br><button class="btn btn-sm btn-primary" style="margin-top:12px" onclick="openPractice(true)">📝 查看巩固建议</button></div>';
+
+// Eval history
+document.getElementById('eh').innerHTML=ei.length?ei.slice(0,5).map(function(e){return'<div class="rec-item"><div class="r-top"><span class="r-topic">'+e.subject+' · '+e.date+'</span><span class="r-score">'+'★'.repeat(e.mastery)+'☆'.repeat(5-e.mastery)+'</span></div><div class="r-detail">专注'+e.focus+'/5 · '+(e.difficulties||'—')+' · '+e.homework+'</div></div>'}).join(''):'<div class="empty">还没有评价记录</div>';
+}).catch(function(){})}
+
+window.retryWrong=function(){openPractice(true)};
+window.genReview=function(){fetch(BLOB).then(function(r){return r.json()}).then(function(d){var items=d.items||[];localStorage.setItem("tutor_data_backup",JSON.stringify(d));var qi=items.filter(function(e){return e.type==='quiz'&&e.studentName===name});var wt={};qi.forEach(function(q){if(!q.wrongDetails)return;q.wrongDetails.forEach(function(w){var t=w.tag||'其他';wt[t]=(wt[t]||0)+1})});var sw=Object.keys(wt).sort(function(a,b){return wt[b]-wt[a]}).slice(0,4);var msg='📊 '+name+' 复习建议\n\n';if(!sw.length)msg+='暂无薄弱点，继续保持练习节奏！\n建议挑战更高难度的综合题。';else{msg+='🔥 重点复习知识点：\n';sw.forEach(function(t,i){msg+=(i+1)+'. '+t+'（错'+wt[t]+'次）\n'});msg+='\n💡 点击「错题重做」或切换到「薄弱巩固」标签页，可以针对这些知识点做互动练习！'}alert(msg)})};
+function logout(){localStorage.removeItem('ws_name');localStorage.removeItem('ws_role');location.href='index.html'}
+refresh();
+</script>
+</body>
+</html>

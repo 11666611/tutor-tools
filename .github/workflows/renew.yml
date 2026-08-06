@@ -1,0 +1,41 @@
+name:AutoRenew
+on:
+  schedule:
+    - cron:"30 20 * * *"
+  workflow_dispatch:
+jobs:
+  renew:
+    runs-on:ubuntu-latest
+    permissions:
+      contents:write
+    steps:
+      - uses:actions/checkout@v4
+      - uses:actions/setup-python@v5
+        with:{python-version:"3.12"}
+      - name:renew
+        shell:python
+        run:|
+          import requests,re
+          FILES=["math_practice.html","math_junior.html","student_review.html","student_desk.html","teacher_desk.html","teacher_dashboard.html"]
+          ids=set()
+          for f in FILES:
+            with open(f) as fh:ids.update(re.findall(r"jsonblob.com/api/jsonBlob/([a-f0-9-]+)",fh.read()))
+          data={"items":[]}
+          for bid in ids:
+            r=requests.get(f"https://jsonblob.com/api/jsonBlob/{bid}",timeout=15)
+            if r.status_code==200:
+              d=r.json()
+              if len(d.get("items",[]))>0:data=d;break
+          r=requests.post("https://jsonblob.com/api/jsonBlob",json=data,timeout=15)
+          if r.status_code in [200,201]:
+            nid=r.headers.get("Location","").split("/")[-1]
+            for f in FILES:
+              with open(f) as fh:c=fh.read()
+              for bid in ids:c=c.replace(bid,nid)
+              with open(f,"w") as fh:fh.write(c)
+            print(f"OK:{nid}")
+      - run:|
+          git config user.name bot
+          git config user.email bot@auto.com
+          git add .
+          git diff --staged --quiet||git commit -m renew&&git push

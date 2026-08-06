@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>家教工作台</title>
+<style>:root{--nav-w:220px;--bg:#0f1923;--card:#1a2740;--sidebar:#152238;--primary:#3b72b9;--accent:#4fc3b0;--text:#e0e6ed;--muted:#7a8b9e;--border:#263548;--red:#e0556a;--orange:#e8913a;--green:#4fc3b0;--purple:#7b8fce;--radius:12px;--shadow:0 2px 12px rgba(0,0,0,.18);--transition:.2s ease}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden;line-height:1.5}h2{font-size:1.25em;font-weight:700;margin-bottom:18px;color:#fff;letter-spacing:-.2px}h3{font-size:1em;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:12px}h4{font-size:.8em;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}.page{display:none;animation:fadeIn var(--transition)}.page.show{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Sidebar */
+.sidebar{width:var(--nav-w);min-width:var(--nav-w);background:var(--sidebar);border-right:1px solid var(--border);padding:24px 14px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:transform var(--transition)}.sidebar .logo{font-size:1.1em;font-weight:800;color:#fff;padding:0 8px 20px;border-bottom:1px solid var(--border);margin-bottom:16px;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}.sidebar .logo span{color:var(--accent)}.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:.87em;color:var(--muted);transition:all var(--transition);margin-bottom:2px;font-weight:500;border-left:3px solid transparent}.nav-item:hover{background:rgba(79,195,176,.06);color:#d0d8e0}.nav-item.active{background:rgba(59,114,185,.15);color:#fff;font-weight:600;border-left-color:var(--primary)}.nav-item .ni{font-size:1.1em;width:24px;text-align:center}
+
+/* Mobile hamburger */
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:300;width:40px;height:40px;border-radius:10px;background:var(--sidebar);border:1px solid var(--border);cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px}.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:1px}.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199}
+
+/* Main */
+.main{margin-left:var(--nav-w);flex:1;padding:28px 32px;max-width:calc(100vw - var(--nav-w))}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all var(--transition);box-shadow:var(--shadow)}.card:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.25)}.card .num{font-size:2em;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-.5px}.card .num.blue{color:var(--primary)}.card .num.green{color:var(--green)}.card .num.orange{color:var(--orange)}.card .num.red{color:var(--red)}.card .num.purple{color:var(--purple)}.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow);overflow-x:auto}.panel h3{margin-bottom:14px}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:.85em}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border)}th{color:var(--muted);font-weight:600;font-size:.78em;text-transform:uppercase;letter-spacing:.3px}td{color:var(--text)}tr:hover td{background:rgba(255,255,255,.01)}
+
+/* Forms */
+input,select,textarea{width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:.9em;font-family:inherit;transition:all var(--transition)}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,114,185,.12)}textarea{resize:vertical;min-height:64px;line-height:1.6}label{display:block;font-size:.82em;font-weight:600;margin:10px 0 4px;color:var(--muted)}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:120px}
+
+/* Tags */
+.tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.75em;font-weight:600}.tag-blue{background:rgba(59,114,185,.15);color:var(--primary)}.tag-green{background:rgba(79,195,176,.12);color:var(--green)}.tag-red{background:rgba(224,85,106,.12);color:var(--red)}.tag-orange{background:rgba(232,145,58,.12);color:var(--orange)}.tag-purple{background:rgba(123,143,206,.12);color:var(--purple)}
+
+/* Buttons */
+.btn{padding:10px 22px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.86em;font-family:inherit;transition:all var(--transition);white-space:nowrap;display:inline-flex;align-items:center;gap:6px}.btn:hover{transform:translateY(-1px)}.btn:active{transform:scale(.97)}.btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(59,114,185,.25)}.btn-primary:hover{box-shadow:0 4px 16px rgba(59,114,185,.35)}.btn-accent{background:var(--accent);color:#0f1923;font-weight:700}.btn-danger{background:0 0;color:var(--red);border:1.5px solid var(--red)}.btn-sm{padding:6px 14px;font-size:.78em;border-radius:6px}.btn-xs{padding:3px 10px;font-size:.7em;border-radius:5px}.btn-ghost{background:0 0;border:1.5px solid var(--border);color:var(--muted)}.btn-ghost:hover{border-color:var(--primary);color:#fff}.btn-bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+/* Tab buttons */
+.tab-row{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}.tab-btn{padding:8px 18px;border-radius:8px;cursor:pointer;font-size:.84em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all var(--transition)}.tab-btn:hover{border-color:var(--primary);color:#fff}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* Schedule */
+.sched-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);font-size:.9em}.sched-item .time{color:var(--accent);font-weight:600;min-width:90px;font-family:'SF Mono',monospace}.sched-item .stu{font-weight:600;min-width:90px}.sched-item .info{color:var(--muted);flex:1}
+
+/* Detail panel */
+.detail-panel{display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:10px}.detail-panel.show{display:block}.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.9em}.kb-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:6px;font-size:.88em;line-height:1.6}.kb-card .k{color:var(--accent);font-weight:600;font-family:'SF Mono','Consolas',monospace}.divider{border-top:1px solid var(--border);margin:16px 0}
+
+@media(max-width:768px){
+:root{--nav-w:0}.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0);box-shadow:4px 0 30px rgba(0,0,0,.5)}.hamburger{display:flex}.overlay.show{display:block}.main{margin-left:0;max-width:100%;padding:16px}.cards{grid-template-columns:repeat(2,1fr)}.sched-item{flex-direction:column;align-items:flex-start;gap:4px}}
+</style>
+</head>
+<body>
+
+<!-- HAMBURGER -->
+<div class="hamburger" id="ham" onclick="toggleSidebar()"><span></span><span></span><span></span></div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+<div class="logo">📚 <span>家教工作台</span></div>
+<div class="nav-item active" data-page="dash"><span class="ni">📊</span>仪表盘</div>
+<div class="nav-item" data-page="stu"><span class="ni">👥</span>学生档案</div>
+<div class="nav-item" data-page="parent"><span class="ni">💬</span>家长台账</div>
+<div class="nav-item" data-page="pay"><span class="ni">💰</span>薪酬统计</div>
+<div class="nav-item" data-page="errors"><span class="ni">📝</span>错题库</div>
+<div class="nav-item" data-page="kb"><span class="ni">📖</span>知识库</div>
+<div class="nav-item" data-page="plan"><span class="ni">📋</span>教案模板</div>
+<div class="nav-item" data-page="ai"><span class="ni">🤖</span>AI批改</div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- DASHBOARD -->
+<div class="page show" id="page-dash">
+<h2>📊 仪表盘</h2>
+<div class="cards" id="dashCards"></div>
+<div class="panel"><h3>📅 今日课表 <span style="font-weight:400;color:var(--muted);font-size:.8em;margin-left:8px" id="todayDate"></span></h3><div id="todaySchedule"></div></div>
+<div class="panel"><h3>⏰ 待办提醒</h3><div id="todoList"></div></div>
+</div>
+
+<!-- STUDENTS -->
+<div class="page" id="page-stu">
+<h2>👥 学生档案</h2>
+<div class="panel"><div class="row" style="margin-bottom:10px"><input id="stuName" placeholder="姓名"><input id="stuGrade" placeholder="年级"><input id="stuPrice" placeholder="课时单价(元)" type="number"><input id="stuMode" placeholder="上课形式"></div><div class="btn-bar"><button class="btn btn-primary" onclick="addStudent()">➕ 添加学生</button></div></div>
+<div class="panel"><h3>学生列表</h3><div id="stuList"></div></div>
+<div class="panel" id="stuDetailCard" style="display:none"><h3 id="stuDetailTitle"></h3><div id="stuDetail"></div></div>
+</div>
+
+<!-- PARENT -->
+<div class="page" id="page-parent">
+<h2>💬 家长沟通台账</h2>
+<div class="panel"><div class="row" style="margin-bottom:8px"><select id="ptStu"><option value="">选择学生</option></select><input type="date" id="ptDate"><input id="ptTopic" placeholder="沟通主题"></div><textarea id="ptContent" placeholder="沟通内容..."></textarea><input id="ptTodo" placeholder="待办事项（可选）" style="margin-top:6px"><div class="btn-bar"><button class="btn btn-primary" onclick="addParentLog()">➕ 添加记录</button></div></div>
+<div class="panel"><h3>沟通记录</h3><div id="ptList"></div></div>
+</div>
+
+<!-- PAYMENT -->
+<div class="page" id="page-pay">
+<h2>💰 课时薪酬统计</h2>
+<div class="cards" id="payCards"></div>
+<div class="panel"><h3>课时明细</h3><div id="payDetail"></div></div>
+</div>
+
+<!-- ERRORS -->
+<div class="page" id="page-errors">
+<h2>📝 公共错题库</h2>
+<div class="panel"><div class="row" style="margin-bottom:8px"><select id="errGrade"><option>初三</option><option>高一</option><option>高三</option></select><input id="errTopic" placeholder="知识点标签"></div><textarea id="errQuestion" placeholder="题目内容..." style="margin-top:6px"></textarea><input id="errAnswer" placeholder="答案/解析" style="margin-top:6px"><div class="btn-bar"><button class="btn btn-primary" onclick="addError()">➕ 录入错题</button></div></div>
+<div class="panel"><h3 id="errTitle">初三 · 错题库</h3><div id="errList"></div></div>
+</div>
+
+<!-- KNOWLEDGE BASE -->
+<div class="page" id="page-kb">
+<h2>📖 分年级知识库</h2>
+<div class="tab-row"><button class="tab-btn active" data-g="初三">初三</button><button class="tab-btn" data-g="高一">高一</button><button class="tab-btn" data-g="高三">高三</button></div>
+<div id="kbContent"></div>
+</div>
+
+<!-- LESSON PLANS -->
+<div class="page" id="page-plan">
+<h2>📋 教案模板面板</h2>
+<div class="tab-row"><button class="tab-btn active" data-p="初三">初三 · 2小时课堂</button><button class="tab-btn" data-p="高一">高一 · 2小时课堂</button><button class="tab-btn" data-p="高三">高三 · 一轮复习</button></div>
+<div id="planContent"></div>
+</div>
+
+<!-- AI -->
+<div class="page" id="page-ai">
+<h2>🤖 AI批改</h2>
+<div class="panel"><h3>📤 题目</h3><textarea id="aiQ" placeholder="粘贴题目内容..." style="min-height:80px"></textarea></div>
+<div class="panel"><h3>✏️ 学生作答</h3><textarea id="aiA" placeholder="粘贴学生作答内容..." style="min-height:80px"></textarea></div>
+<button class="btn btn-accent" style="margin-top:10px" onclick="aiGrade()">🔍 分析</button>
+<div class="panel" style="margin-top:12px"><h3>📊 结果</h3><div id="aiOutput" style="color:var(--muted)">输入题目和学生作答后点击分析。</div></div>
+</div>
+
+</div>
+
+<script>
+// ==================== DATA ====================
+var DB=function(k,d){var v=localStorage.getItem(k);return v?JSON.parse(v):d}
+var SV=function(k,v){localStorage.setItem(k,JSON.stringify(v))}
+var students=DB('wb_students',[]),parentLogs=DB('wb_parent',[]),errors=DB('wb_errors',[]),classRecords=DB('wb_records',[]),payLogs=DB('wb_pay',[]);
+if(!students.length){students=[{id:1,name:'学生A',grade:'高一',price:200,mode:'线下',notes:'',tags:[]},{id:2,name:'学生B',grade:'初三',price:180,mode:'线上',notes:'',tags:[]}];SV('wb_students',students)}
+
+// ==================== SIDEBAR ====================
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')}
+document.querySelectorAll('.nav-item').forEach(function(n){n.addEventListener('click',function(){document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active')});this.classList.add('active');var p=this.dataset.page;document.querySelectorAll('.page').forEach(function(x){x.classList.remove('show')});document.getElementById('page-'+p).classList.add('show');if(window.innerWidth<768)toggleSidebar();if(p==='dash')renderDash();if(p==='stu')renderStudents();if(p==='parent')renderParent();if(p==='pay')renderPay();if(p==='errors')renderErrors();if(p==='kb')renderKB();if(p==='plan')renderPlan()})});
+
+// ==================== DASHBOARD ====================
+function renderDash(){
+document.getElementById('todayDate').textContent=new Date().toLocaleDateString('zh-CN',{weekday:'long',month:'long',day:'numeric'});
+var total=students.length,unpaid=payLogs.filter(function(p){return p.status==='unpaid'}).reduce(function(s,p){return s+p.amount},0),totalH=classRecords.reduce(function(s,r){return s+(r.hours||0)},0);
+document.getElementById('dashCards').innerHTML='<div class="card"><h4>学生总数</h4><div class="num blue">'+total+'</div></div><div class="card"><h4>总课时</h4><div class="num green">'+totalH+'<span style="font-size:.5em;color:var(--muted)"> h</span></div></div><div class="card"><h4>待结算</h4><div class="num orange">¥'+(unpaid||0)+'</div></div><div class="card"><h4>待办事项</h4><div class="num purple">'+parentLogs.filter(function(p){return p.todo&&!p.done}).length+'</div></div>';
+var schedule=[{time:'08:00-10:00',stu:students[0]?.name||'—',grade:students[0]?.grade||'—'},{time:'10:30-12:30',stu:students[1]?.name||'—',grade:students[1]?.grade||'—'},{time:'14:00-16:00',stu:'待排课',grade:'—'},{time:'16:30-18:30',stu:'待排课',grade:'—'}];
+document.getElementById('todaySchedule').innerHTML=schedule.map(function(s){return'<div class="sched-item"><span class="time">'+s.time+'</span><span class="stu">'+s.stu+'</span><span class="info">'+s.grade+'</span></div>'}).join('');
+var todos=parentLogs.filter(function(p){return p.todo&&!p.done}).slice(0,5);
+document.getElementById('todoList').innerHTML=todos.length?todos.map(function(t){return'<div style="padding:10px 0;border-bottom:1px solid var(--border);font-size:.87em;display:flex;justify-content:space-between"><span>⚠ '+t.todo+' <span style="color:var(--muted)">· '+t.student+'</span></span><button class="btn btn-xs btn-accent" onclick="doneTodo('+t.id+')">✓ 完成</button></div>'}).join(''):'<div class="empty">暂无待办</div>'
+}
+
+// ==================== STUDENTS ====================
+window.addStudent=function(){var n=document.getElementById('stuName').value.trim();if(!n)return;students.push({id:Date.now(),name:n,grade:document.getElementById('stuGrade').value||'',price:parseInt(document.getElementById('stuPrice').value)||0,mode:document.getElementById('stuMode').value||'',notes:'',tags:[]});SV('wb_students',students);['stuName','stuGrade','stuPrice','stuMode'].forEach(function(id){document.getElementById(id).value=''});renderStudents()};
+function renderStudents(){
+document.getElementById('stuList').innerHTML=students.length?students.map(function(s,i){var recs=classRecords.filter(function(r){return r.stuId===s.id});return'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px"><div><strong>'+s.name+'</strong> <span class="tag tag-blue">'+s.grade+'</span> <span style="color:var(--muted);font-size:.82em">¥'+s.price+'/h · '+s.mode+' · '+recs.length+'节课</span>'+(s.tags&&s.tags.length?s.tags.map(function(t){return' <span class="tag tag-red">'+t+'</span>'}).join(''):'')+'</div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-primary" onclick="openStu('+s.id+')">详情</button> <button class="btn btn-sm btn-danger" onclick="delStu('+s.id+')">删除</button></div></div>'}).join(''):'<div class="empty">暂无学生</div>';
+var sel=document.getElementById('ptStu');sel.innerHTML='<option value="">选择学生</option>'+students.map(function(s){return'<option value="'+s.id+'">'+s.name+'</option>'}).join('')
+}
+window.openStu=function(id){var s=students.find(function(x){return x.id===id});if(!s)return;
+document.getElementById('stuDetailCard').style.display='block';document.getElementById('stuDetailTitle').textContent=s.name+' · '+s.grade+' · ¥'+s.price+'/h';
+var recs=classRecords.filter(function(r){return r.stuId===id});
+document.getElementById('stuDetail').innerHTML='<div class="row" style="margin-bottom:10px"><input id="recDate" type="date"><input id="recTopic" placeholder="课堂内容"><input id="recHours" type="number" value="2" min="0.5" step="0.5" style="max-width:80px"></div><textarea id="recNotes" placeholder="学情备注（薄弱知识点）..." style="margin-bottom:6px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><span class="tag tag-red btn-xs" style="cursor:pointer" onclick="addTag('+id+',\'基础薄弱\')">+基础薄弱</span><span class="tag tag-orange btn-xs" style="cursor:pointer" onclick="addTag('+id+',\'计算粗心\')">+计算粗心</span><span class="tag tag-purple btn-xs" style="cursor:pointer" onclick="addTag('+id+',\'审题不清\')">+审题不清</span></div><button class="btn btn-sm btn-accent" onclick="addRecord('+id+')">➕ 添加课堂记录</button><div class="divider"></div><strong>学情标签：</strong>'+(s.tags&&s.tags.length?s.tags.map(function(t){return'<span class="tag tag-red" style="margin:2px">'+t+'</span>'}).join(''):'<span style="color:var(--muted)">无</span>')+'<div style="margin-top:10px"><strong>课堂记录：</strong>'+(!recs.length?'<div class="empty">暂无</div>':recs.map(function(r){return'<div style="padding:10px 0;border-bottom:1px solid var(--border);font-size:.87em"><span style="color:var(--accent);font-weight:600">'+r.date+'</span> · '+r.topic+' · '+r.hours+'h <span style="color:var(--muted)">· '+r.notes+'</span></div>'}).join(''))+'</div>'};
+document.getElementById('page-stu').scrollIntoView({behavior:'smooth'})
+};
+window.addTag=function(id,tag){var s=students.find(function(x){return x.id===id});if(!s)return;if(!s.tags)s.tags=[];if(!s.tags.includes(tag))s.tags.push(tag);SV('wb_students',students);openStu(id)};
+window.addRecord=function(id){var d=document.getElementById('recDate').value||new Date().toISOString().split('T')[0];var t=document.getElementById('recTopic').value.trim();var h=parseFloat(document.getElementById('recHours').value)||2;var n=document.getElementById('recNotes').value.trim();if(!t)return;classRecords.push({id:Date.now(),stuId:id,date:d,topic:t,hours:h,notes:n});SV('wb_records',classRecords);var p=students.find(function(x){return x.id===id});if(p){payLogs.push({id:Date.now(),stuId:id,student:p.name,date:d,hours:h,amount:h*p.price,status:'unpaid'});SV('wb_pay',payLogs)}openStu(id)};
+window.delStu=function(id){if(!confirm('删除该学生及全部记录？'))return;students=students.filter(function(x){return x.id!==id});classRecords=classRecords.filter(function(r){return r.stuId!==id});payLogs=payLogs.filter(function(p){return p.stuId!==id});SV('wb_students',students);SV('wb_records',classRecords);SV('wb_pay',payLogs);renderStudents()};
+
+// ==================== PARENT ====================
+window.addParentLog=function(){var sid=parseInt(document.getElementById('ptStu').value);var s=students.find(function(x){return x.id===sid});if(!s)return;parentLogs.push({id:Date.now(),stuId:sid,student:s.name,date:document.getElementById('ptDate').value||new Date().toISOString().split('T')[0],topic:document.getElementById('ptTopic').value.trim(),content:document.getElementById('ptContent').value.trim(),todo:document.getElementById('ptTodo').value.trim(),done:false});SV('wb_parent',parentLogs);['ptDate','ptTopic','ptContent','ptTodo'].forEach(function(id){document.getElementById(id).value=''});renderParent()};
+function renderParent(){document.getElementById('ptStu').innerHTML='<option value="">选择学生</option>'+students.map(function(s){return'<option value="'+s.id+'">'+s.name+'</option>'}).join('');
+document.getElementById('ptList').innerHTML=parentLogs.length?parentLogs.map(function(p){return'<div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><strong>'+p.student+'</strong> <span class="tag tag-blue">'+p.date+'</span> '+p.topic+'<br><span style="font-size:.84em;color:var(--muted)">'+p.content+'</span>'+(!p.todo?'':'<br><span style="color:var(--orange);font-size:.82em">📌 待办：'+p.todo+'</span>')+'</div><div>'+(p.done?'<span class="tag tag-green">已完成</span>':'<button class="btn btn-xs btn-accent" onclick="doneTodo('+p.id+')">✓ 完成</button>')+'</div></div>'}).join(''):'<div class="empty">暂无记录</div>'}
+window.doneTodo=function(id){var p=parentLogs.find(function(x){return x.id===id});if(p){p.done=true;SV('wb_parent',parentLogs);renderParent();renderDash()}};
+
+// ==================== PAYMENT ====================
+function renderPay(){var totalH=classRecords.reduce(function(s,r){return s+(r.hours||0)},0);var totalA=payLogs.reduce(function(s,p){return s+p.amount},0);var settled=payLogs.filter(function(p){return p.status==='paid'}).reduce(function(s,p){return s+p.amount},0);var unpaid=totalA-settled;
+document.getElementById('payCards').innerHTML='<div class="card"><h4>总课时</h4><div class="num blue">'+totalH+'<span style="font-size:.5em;color:var(--muted)"> h</span></div></div><div class="card"><h4>应收</h4><div class="num orange">¥'+totalA+'</div></div><div class="card"><h4>已结算</h4><div class="num green">¥'+settled+'</div></div><div class="card"><h4>未结算</h4><div class="num red">¥'+unpaid+'</div></div>';
+document.getElementById('payDetail').innerHTML=payLogs.length?payLogs.map(function(p){return'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px"><div><strong>'+p.student+'</strong> <span style="color:var(--muted);font-size:.82em">'+p.date+' · '+p.hours+'h · ¥'+p.amount+'</span></div><div><span class="tag '+(p.status==='paid'?'tag-green':'tag-orange')+'">'+(p.status==='paid'?'已结':'未结')+'</span> '+(p.status!=='paid'?'<button class="btn btn-xs btn-accent" onclick="settle('+p.id+')">结算</button>':'')+'</div></div>'}).join(''):'<div class="empty">暂无记录（添加课堂记录自动生成）</div>'}
+window.settle=function(id){var p=payLogs.find(function(x){return x.id===id});if(p){p.status='paid';SV('wb_pay',payLogs);renderPay()}};
+
+// ==================== ERRORS ====================
+window.addError=function(){var g=document.getElementById('errGrade').value;var t=document.getElementById('errTopic').value.trim();var q=document.getElementById('errQuestion').value.trim();var a=document.getElementById('errAnswer').value.trim();if(!q)return;errors.push({id:Date.now(),grade:g,topic:t,question:q,answer:a});SV('wb_errors',errors);['errTopic','errQuestion','errAnswer'].forEach(function(id){document.getElementById(id).value=''});renderErrors()};
+function renderErrors(){var g=document.getElementById('errGrade').value;document.getElementById('errTitle').textContent=g+' · 错题库（'+errors.filter(function(e){return e.grade===g}).length+' 题）';
+document.getElementById('errList').innerHTML=errors.filter(function(e){return e.grade===g}).length?errors.filter(function(e){return e.grade===g}).map(function(e){return'<div style="padding:12px 0;border-bottom:1px solid var(--border)"><span class="tag tag-blue" style="margin-right:8px">'+e.topic+'</span><span style="font-weight:600">'+e.question+'</span><div style="color:var(--muted);font-size:.82em;margin-top:4px">💡 '+e.answer+'</div><span class="btn btn-xs btn-ghost" style="margin-top:4px;cursor:pointer" onclick="copyTxt(\''+e.question.replace(/'/g,"\\'")+'\')">📋 复制题目</span></div>'}).join(''):'<div class="empty">暂无错题</div>'};
+document.getElementById('errGrade').onchange=renderErrors}
+window.copyTxt=function(t){navigator.clipboard?navigator.clipboard.writeText(t).then(function(){alert('已复制')}):alert('手动复制：'+t)};
+
+// ==================== KNOWLEDGE BASE ====================
+var kb={'初三':{f:['二次函数顶点式：y=a(x-h)²+k','勾股定理：a²+b²=c²','圆：S=πr²，C=2πr','相似三角形判定','三角函数定义'],t:['二次函数配方易漏系数','分式方程忘检验增根','圆中辅助线：连半径','概率题注意放回不放回']},'高一':{f:['集合运算：∩∪∁','基本不等式：a+b≥2√(ab)','函数定义域求法','二次不等式：△判别法','指数幂运算'],t:['空集∅是任何集合子集','不等式乘负数要变号','基本不等式等号条件','集合描述法规范']},'高三':{f:['导数公式：(xⁿ)′=nxⁿ⁻¹','三角和差公式','数列求和公式','条件概率','点到直线距离'],t:['导数求极值需验证','错位相减法易算错','概率题列举不全','解析几何忽略斜率不存在']}};
+function renderKB(){var g=document.querySelector('#page-kb .tab-btn.active').dataset.g;var d=kb[g];
+document.getElementById('kbContent').innerHTML='<div class="panel"><h3>📐 核心公式</h3>'+d.f.map(function(f){return'<div class="kb-card"><span class="k">'+f+'</span></div>'}).join('')+'</div><div class="panel" style="margin-top:12px"><h3>⚠ 易错提醒</h3>'+d.t.map(function(t){return'<div class="kb-card" style="border-left:3px solid var(--red)">⚠ '+t+'</div>'}).join('')+'</div>'}
+document.querySelectorAll('#page-kb .tab-btn').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#page-kb .tab-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');renderKB()})});
+
+// ==================== LESSON PLANS ====================
+var plans={'初三':{t:'初三 · 2小时课堂教学模板',s:['0-15′ 课前检测：作业批改 + 易错回顾','15-45′ 新课讲授：知识点精讲 + 典例演示','45-75′ 课堂练习：配套习题 + 巡视纠正','75-100′ 拔高拓展：中档题 + 综合训练','100-120′ 总结布置：课堂小结 + 作业安排']},'高一':{t:'高一 · 2小时课堂教学模板',s:['0-15′ 知识回顾：上周概念快速梳理','15-50′ 新课推进：新知识点讲解 + 板书推导','50-85′ 典例精练：逐道分析 + 变式练习','85-110′ 思维培养：多解归一 + 分类讨论','110-120′ 归纳布置：思维导图 + 针对性作业']},'高三':{t:'高三 · 一轮复习模板',s:['0-20′ 知识唤醒：框架梳理 + 公式默写','20-55′ 考点突破：高频考点 + 真题精讲','55-90′ 限时训练：模拟考场 + 严格计时','90-110′ 错题诊断：当场批改 + 薄弱定位','110-120′ 复习规划：自主复习任务 + 下周预告']}};
+function renderPlan(){var p=document.querySelector('#page-plan .tab-btn.active').dataset.p;var d=plans[p];
+document.getElementById('planContent').innerHTML='<div class="panel"><h3>'+d.t+'</h3>'+d.s.map(function(s,i){var parts=s.split('：');return'<div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start"><span style="color:var(--accent);font-weight:700;font-size:.85em;min-width:80px">'+parts[0]+'</span><span style="font-size:.88em">'+parts[1]+'</span></div>'}).join('')+'</div>'}
+document.querySelectorAll('#page-plan .tab-btn').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#page-plan .tab-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');renderPlan()})});
+
+// ==================== AI ====================
+window.aiGrade=function(){var q=document.getElementById('aiQ').value.trim();var a=document.getElementById('aiA').value.trim();if(!q||!a)return;
+document.getElementById('aiOutput').innerHTML='<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:.9em;line-height:1.8"><span style="color:var(--accent);font-weight:700">🔍 批改分析结果</span><br><br>📝 <b>题目类型：</b>已识别<br>✏️ <b>作答内容：</b>已接收<br><br>📊 <b>批改维度（API接入后可自动完成）：</b><br>① 步骤完整性检查<br>② 计算正确性验证<br>③ 知识点薄弱标签生成<br>④ 同类巩固题目推荐<br><br><span style="color:var(--muted)">当前为离线演示模式，接入AI API后自动完成分析。</span></div>'};
+
+// ==================== INIT ====================
+renderDash();renderStudents();renderParent();renderPay();renderErrors();renderKB();renderPlan();
+</script>
+</body>
+</html>

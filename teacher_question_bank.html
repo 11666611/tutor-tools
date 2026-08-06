@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>题库管理</title>
+<style>:root{--bg:#0a0a14;--card:rgba(255,255,255,.03);--blue:#5b9cf5;--green:#4ade80;--orange:#fb923c;--red:#f87171;--purple:#a78bfa;--text:#e2e8f0;--muted:#94a3b8;--border:rgba(255,255,255,.08);--radius:14px}*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(135deg,#0a0a14,#141028,#0a1428);color:var(--text);min-height:100vh;padding:16px}.wrap{max-width:800px;margin:0 auto}.header{text-align:center;padding:16px 0}.header h1{font-size:1.4em;font-weight:800}.header p{color:var(--muted);font-size:.8em;margin-top:4px}.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}.btn{padding:9px 18px;border-radius:20px;cursor:pointer;font-weight:700;font-size:.82em;border:none;font-family:inherit;transition:all .15s;min-height:38px}.btn:active{transform:scale(.96)}.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(91,156,245,.2)}.btn-green{background:var(--green);color:#000}.btn-red{background:0 0;color:var(--red);border:2px solid var(--red)}.btn-ghost{background:0 0;color:var(--muted);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--blue);color:#fff}.topics{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center}.tbtn{padding:7px 16px;border-radius:18px;cursor:pointer;font-size:.8em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.tbtn:hover{border-color:var(--blue);color:#fff}.tbtn.on{background:var(--blue);color:#fff;border-color:var(--blue)}.tbtn-new{border-style:dashed}.info-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.82em;color:var(--muted)}.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:8px;backdrop-filter:blur(10px)}.q-card .q-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}.q-card .q-num{font-weight:700;font-size:.85em;color:var(--blue)}.q-card .q-tag{display:inline-block;padding:2px 10px;border-radius:8px;font-size:.72em;font-weight:600;background:rgba(167,139,250,.12);color:var(--purple)}.q-card .q-text{font-size:.9em;margin:8px 0;line-height:1.6}.q-card .q-opts{font-size:.82em;color:var(--muted);line-height:1.7;margin-bottom:6px}.q-card .q-ans{font-size:.82em;font-weight:600;color:var(--green)}.q-card .q-acts{display:flex;gap:6px;margin-top:10px}.btn-xs{padding:4px 12px;border-radius:12px;cursor:pointer;font-size:.73em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.btn-xs:hover{border-color:var(--blue);color:var(--blue)}.btn-xs.del:hover{border-color:var(--red);color:var(--red)}.form-card{background:rgba(91,156,245,.04);border:1px solid rgba(91,156,245,.15);border-radius:var(--radius);padding:20px;margin-top:16px;display:none}.form-card.show{display:block}.form-card h3{font-size:.95em;margin-bottom:14px;color:var(--blue)}.form-row{margin-bottom:12px}.form-row label{display:block;font-size:.78em;font-weight:600;color:var(--muted);margin-bottom:4px}.form-row input,.form-row textarea,.form-row select{width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:.88em;font-family:inherit;resize:vertical}.form-row textarea{min-height:60px}.form-row input:focus,.form-row textarea:focus,.form-row select:focus{outline:none;border-color:var(--blue)}.form-acts{display:flex;gap:8px;margin-top:14px}.empty{text-align:center;padding:40px;color:var(--muted)}.status{font-size:.76em;padding:6px 14px;border-radius:14px}.status.ok{background:rgba(74,222,128,.12);color:var(--green)}.status.err{background:rgba(248,113,113,.12);color:var(--red)}@media(max-width:480px){.q-card{padding:12px}.form-card{padding:14px}}</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header"><h1>📝 题库管理</h1><p>添加 · 编辑 · 删除题目，数据云端同步</p></div>
+<div class="toolbar">
+  <span class="status" id="sync">加载中...</span>
+  <button class="btn btn-blue" onclick="refresh()">🔄 刷新</button>
+  <button class="btn btn-green" onclick="showAddForm()">➕ 添加题目</button>
+  <button class="btn btn-ghost" onclick="exportBank()">📥 导出</button>
+  <button class="btn btn-ghost" onclick="importSeed()">📥 导入预设题库</button>
+</div>
+<div class="topics" id="topicBar"></div>
+<div class="info-bar"><span id="topicInfo"></span><span id="qCount"></span></div>
+<div id="qList"></div>
+<div class="form-card" id="formCard">
+  <h3 id="formTitle">添加题目</h3>
+  <div class="form-row"><label>知识点标签</label><input type="text" id="ftag" placeholder="如：子集个数公式·2ⁿ"></div>
+  <div class="form-row"><label>题目文本</label><textarea id="ftext" placeholder="输入题目内容"></textarea></div>
+  <div class="form-row"><label>选项 A</label><input type="text" id="foptA" placeholder="A选项内容"></div>
+  <div class="form-row"><label>选项 B</label><input type="text" id="foptB" placeholder="B选项内容"></div>
+  <div class="form-row"><label>选项 C</label><input type="text" id="foptC" placeholder="C选项内容（可选）"></div>
+  <div class="form-row"><label>选项 D</label><input type="text" id="foptD" placeholder="D选项内容（可选）"></div>
+  <div class="form-row"><label>正确答案</label><select id="fans"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>
+  <input type="hidden" id="feditId">
+  <div class="form-acts"><button class="btn btn-blue" onclick="saveQ()">💾 保存</button><button class="btn btn-ghost" onclick="hideForm()">取消</button></div>
+</div>
+</div>
+<script>
+var BLOB='https://jsonblob.com/api/jsonBlob/019fd2b7-4376-7e01-aad8-0390e6b2fbce';
+var bank={};
+var curTopic='';
+
+// 预设题库（从 math_practice.html 同步）
+var seedBank={
+'集合1':[
+{id:'h1',tag:'空集的定义与判定',text:'下列四个集合中，是空集的是？',options:['{x|x²+1=0,x∈R}','{0}','{x|x<0,x∈R}','{∅}'],answer:0},
+{id:'h2',tag:'空集的性质',text:'关于空集，以下正确的命题个数是？\n①∅⊆{0}\n②任何集合必有两个或以上子集\n③空集没有子集\n④空集是任何集合的子集',options:['0个','1个','2个','3个'],answer:2},
+{id:'h3',tag:'子集个数公式·2ⁿ',text:'集合{a,b,c,d}的子集个数为？',options:['8','12','16','32'],answer:2},
+{id:'h4',tag:'真子集个数·2ⁿ-1',text:'集合{1,2,3}的真子集的个数为？',options:['6','7','8','9'],answer:1},
+{id:'h5',tag:'元素与集合、集合与集合关系',text:'设A={1,{2}}，下列各式正确的个数是？\n①1∈A ②{1}⊆A ③{2}∈A ④∅⊆A ⑤{1,{2}}⊆A ⑥{{2}}⊆A',options:['3','4','5','6'],answer:2},
+{id:'h6',tag:'满足条件的集合个数',text:'满足{1}⊆M⊆{1,2,3,4}的集合M的个数为？',options:['4','7','8','15'],answer:2},
+{id:'h7',tag:'集合相等·求参数',text:'设集合A={1,a,b}，B={a,a²,ab}，且A=B，则a²⁰²⁵+b²⁰²⁵的值为？',options:['-1','0','1','2'],answer:0},
+{id:'h8',tag:'含参集合为空集',text:'若集合A={x|ax²+2x+1=0,x∈R}为单元素集合，则实数a的值为？',options:['0','1','0或1','-1或1'],answer:2},
+{id:'h9',tag:'无限集合关系·数轴法求参',text:'集合A={x|-1≤x<3}，B={x|x>a}。若A⊆B，则a的取值范围是？',options:['a≥-1','a≤-1','a<-1','a>-1'],answer:2},
+{id:'h10',tag:'综合·集合关系+子集个数',text:'集合M={x∈N*|2x²-5x-3≤0}，则M的非空真子集个数为？',options:['1','2','3','6'],answer:3},
+{id:'h11',tag:'含参·空集陷阱',text:'已知A={x|x²+(a+1)x+a=0}，若A中至多有一个元素，则a的值为？',options:['a=1','a=-1','a=1或a=-1','a取任意实数'],answer:0},
+{id:'h12',tag:'含参·子集关系求参',text:'集合A={x|ax²-3x+2=0}至多有一个真子集，则a的值为？',options:['a=0','a=9/8','a=0或a≥9/8','a=0或a=9/8'],answer:2},
+{id:'h13',tag:'含参·集合相等',text:'A={2, a+1, a²-1}，B={a-1, 3, a}，若A∩B={2,3}，则a的值为？',options:['1','2','1或2','-1'],answer:1},
+{id:'h14',tag:'含参·无限集合包含',text:'A={x|2x-a>0}，B={x|3x+a<0}，若A∩B=∅，则a的范围？',options:['a>0','a<0','a≥0','a≤0'],answer:2},
+{id:'h15',tag:'含参·综合求值',text:'已知集合A={x|x²-ax+a²-19=0}，B={x|x²-5x+6=0}，C={x|x²+2x-8=0}，满足A∩B≠∅与A∩C=∅，求a。',options:['-2','5','-2或5','2'],answer:0}
+],
+'集合2':[
+{id:'h16',tag:'容斥原理·两集合',text:'某班50人，喜欢数学的30人，喜欢英语的25人，两科都喜欢的有15人。至少喜欢一科的有多少人？',options:['35','40','45','50'],answer:1},
+{id:'h17',tag:'交并补混合运算',text:'U={1,2,3,4,5,6}，A={1,2,3}，B={2,4,5}，则∁ᵤ(A∩B)等于？',options:['{1,3,4,5,6}','{1,2,3,4,5}','{1,3,4,5}','{1,2,3,4,5,6}'],answer:0},
+{id:'h18',tag:'容斥原理·三集合',text:'60人中，喜欢篮球30人，足球25人，排球20人。篮球和足球12人，篮球和排球8人，足球和排球6人，三种都喜欢3人。三种都不喜欢的有几人？',options:['5','6','8','10'],answer:2},
+{id:'h19',tag:'描述法·集合运算',text:'A={x| |x-2|≤3}，B={x| x²-4x-5≤0}，则A∩B等于？',options:['[-1,5]','[-3,5]','[-1,3]','[-3,3]'],answer:0},
+{id:'h20',tag:'集合相等·二次方程根',text:'已知A={x|x²+ax+b=0}={2}，则a+b的值为？',options:['-4','-2','0','2'],answer:2},
+{id:'h21',tag:'集合关系·等价判断',text:'下列与A⊆B等价的命题有：①A∩B=A；②A∪B=B；③∁B⊆∁A。正确的个数是？',options:['0个','1个','2个','3个'],answer:3},
+{id:'h22',tag:'德摩根律·补集运算',text:'U=R，A={x|x²-1>0}，B={x|x>0}，则(∁ᵤA)∪(∁ᵤB)等于？',options:['(-∞,1]','(-∞,-1]','[-1,+∞)','[1,+∞)'],answer:0},
+{id:'h23',tag:'含参·二次方程空集',text:'A={x|x²-2x+a=0}=∅，则a的取值范围是？',options:['a>1','a<1','a≥1','a≤1'],answer:0},
+{id:'h24',tag:'子集计数·奇数约束',text:'集合A满足{1,2}⊆A⊆{1,2,3,4,5,6}且|A|为奇数，则A的个数为？',options:['4','6','8','10'],answer:2},
+{id:'h25',tag:'容斥原理·求最小值',text:'选A课28人，B课26人，C课24人。A和B都选10人，A和C都选8人，B和C都选6人，三科都选4人。全班至少有多少人？',options:['54','56','58','60'],answer:2},
+{id:'h26',tag:'函数不动点·集合综合',text:'f(x)=x²+px+q，A={x|f(x)=x}={a}为单元素集。B={x|f(f(x))=x}，则|B|等于？',options:['1','2','3','不确定'],answer:0},
+{id:'h27',tag:'定义域值域·交集',text:'A={x|y=√(4-x²)}，B={y|y=x²-1,x∈R}，则A∩B等于？',options:['[-1,2]','[-2,-1]','[-2,2]','[-1,+∞)'],answer:0},
+{id:'h28',tag:'绝对值不等式·集合计数',text:'A={x∈Z| |x²-5x+6|≤2}，则A中元素个数为？',options:['2','3','4','5'],answer:2},
+{id:'h29',tag:'含参·子集关系求范围',text:'A={x|x²-(a+1)x+a≤0}，B={x|x²-5x+4≤0}。若A⊆B，则a的取值范围是？',options:['[1,4]','[0,4]','[1,3]','[0,3]'],answer:0},
+{id:'h30',tag:'集合划分·计数',text:'非空集合A,B,C两两不相交，且A∪B∪C={1,2,3,4,5,6}。若|A|=|B|=|C|，则满足条件的(A,B,C)有多少组？',options:['15','30','60','90'],answer:3}
+]
+};
+
+function setStatus(msg,ok){var el=document.getElementById('sync');el.textContent=msg;el.className='status '+(ok?'ok':'err')}
+
+function refresh(){
+  setStatus('加载中...');
+  fetch(BLOB).then(function(r){if(!r.ok)throw new Error('fetch');return r.json()}).then(function(d){
+    if(!d.questionBank||Object.keys(d.questionBank).length===0){
+      // 首次使用，自动导入预设题库
+      d.questionBank=JSON.parse(JSON.stringify(seedBank));
+      return fetch(BLOB,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(){return d});
+    }
+    return d;
+  }).then(function(d){
+    bank=d.questionBank||{};
+    var topics=Object.keys(bank).sort();
+    if(!curTopic||!bank[curTopic]) curTopic=topics[0]||'';
+    renderTopics(topics);
+    renderList();
+    var total=0;Object.values(bank).forEach(function(qs){total+=qs.length});
+    setStatus('已同步 '+total+'题',true);
+  }).catch(function(e){
+    setStatus('连接失败',false);
+    // 离线时从本地缓存读取
+    var bk=localStorage.getItem('qb_cache');
+    if(bk){bank=JSON.parse(bk);var topics=Object.keys(bank).sort();if(!curTopic||!bank[curTopic])curTopic=topics[0]||'';renderTopics(topics);renderList()}
+  });
+}
+
+function renderTopics(topics){
+  var h='';
+  topics.forEach(function(t){
+    h+='<button class="tbtn'+(t===curTopic?' on':'')+'" onclick="switchTopic(\''+t.replace(/'/g,"\\'")+'\')">'+t+' ('+(bank[t]||[]).length+')</button>';
+  });
+  h+='<button class="tbtn tbtn-new" onclick="newTopic()">+ 新建专题</button>';
+  document.getElementById('topicBar').innerHTML=h;
+}
+
+function switchTopic(t){curTopic=t;renderTopics(Object.keys(bank).sort());renderList()}
+
+function newTopic(){
+  var t=prompt('输入新专题名称（如：函数、三角函数）：');
+  if(!t||!t.trim())return;
+  t=t.trim();
+  if(bank[t]){alert('该专题已存在');return}
+  bank[t]=[];
+  curTopic=t;
+  saveBank();
+}
+
+function renderList(){
+  document.getElementById('topicInfo').textContent=curTopic||'请选择专题';
+  var qs=bank[curTopic]||[];
+  document.getElementById('qCount').textContent=qs.length+'题';
+  if(!qs.length){
+    document.getElementById('qList').innerHTML='<div class="empty">📭 暂无题目<br><button class="btn btn-green" style="margin-top:12px" onclick="showAddForm()">➕ 添加第一题</button></div>';
+    return;
+  }
+  var h='';
+  qs.forEach(function(q,i){
+    var opts=q.options||[];
+    var letters=['A','B','C','D'];
+    var ansLetter=q.answer>=0&&q.answer<4?letters[q.answer]:'?';
+    h+='<div class="q-card">';
+    h+='<div class="q-top"><span class="q-num">#'+(i+1)+'</span><span class="q-tag">'+q.tag+'</span></div>';
+    h+='<div class="q-text">'+q.text+'</div>';
+    if(opts.length){
+      h+='<div class="q-opts">'+opts.map(function(o,j){return letters[j]+'. '+o}).join('&nbsp;&nbsp;|&nbsp;&nbsp;')+'</div>';
+    }
+    h+='<div class="q-ans">✅ 答案：'+ansLetter+(opts[ansLetter]?' — '+opts[ansLetter]:'')+'</div>';
+    h+='<div class="q-acts"><button class="btn-xs" onclick="editQ(\''+q.id+'\')">✏️ 编辑</button><button class="btn-xs del" onclick="deleteQ(\''+q.id+'\')">🗑 删除</button></div>';
+    h+='</div>';
+  });
+  document.getElementById('qList').innerHTML=h;
+}
+
+function showAddForm(){
+  document.getElementById('formTitle').textContent='➕ 添加题目 — '+curTopic;
+  document.getElementById('ftag').value='';
+  document.getElementById('ftext').value='';
+  document.getElementById('foptA').value='';
+  document.getElementById('foptB').value='';
+  document.getElementById('foptC').value='';
+  document.getElementById('foptD').value='';
+  document.getElementById('fans').value='0';
+  document.getElementById('feditId').value='';
+  document.getElementById('formCard').classList.add('show');
+  document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
+}
+
+function hideForm(){document.getElementById('formCard').classList.remove('show')}
+
+function editQ(id){
+  var qs=bank[curTopic]||[];
+  var q=qs.find(function(x){return x.id===id});
+  if(!q)return;
+  document.getElementById('formTitle').textContent='✏️ 编辑题目 — '+curTopic;
+  document.getElementById('ftag').value=q.tag||'';
+  document.getElementById('ftext').value=q.text||'';
+  var opts=q.options||[];
+  document.getElementById('foptA').value=opts[0]||'';
+  document.getElementById('foptB').value=opts[1]||'';
+  document.getElementById('foptC').value=opts[2]||'';
+  document.getElementById('foptD').value=opts[3]||'';
+  document.getElementById('fans').value=q.answer;
+  document.getElementById('feditId').value=id;
+  document.getElementById('formCard').classList.add('show');
+  document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
+}
+
+function saveQ(){
+  var tag=document.getElementById('ftag').value.trim();
+  var text=document.getElementById('ftext').value.trim();
+  var opts=[document.getElementById('foptA').value.trim(),document.getElementById('foptB').value.trim(),document.getElementById('foptC').value.trim(),document.getElementById('foptD').value.trim()];
+  var ans=parseInt(document.getElementById('fans').value);
+  var editId=document.getElementById('feditId').value;
+  if(!tag||!text){alert('请至少填写知识点标签和题目文本');return}
+  // 过滤空选项
+  opts=opts.filter(function(o){return o!==''});
+  if(opts.length<2){alert('请至少填写两个选项');return}
+
+  if(!bank[curTopic]) bank[curTopic]=[];
+  var qs=bank[curTopic];
+
+  if(editId){
+    // 编辑模式
+    var idx=qs.findIndex(function(x){return x.id===editId});
+    if(idx>=0){
+      qs[idx].tag=tag;
+      qs[idx].text=text;
+      qs[idx].options=opts;
+      qs[idx].answer=ans;
+    }
+  }else{
+    // 新增模式
+    var maxId=0;
+    Object.values(bank).forEach(function(arr){
+      arr.forEach(function(q){
+        var n=parseInt(q.id.replace(/[^0-9]/g,''));
+        if(n>maxId)maxId=n;
+      });
+    });
+    qs.push({id:'q'+(maxId+1),tag:tag,text:text,options:opts,answer:ans});
+  }
+  hideForm();
+  saveBank();
+}
+
+function deleteQ(id){
+  if(!confirm('确定删除这道题目吗？此操作不可恢复。'))return;
+  var qs=bank[curTopic]||[];
+  bank[curTopic]=qs.filter(function(q){return q.id!==id});
+  saveBank();
+}
+
+function saveBank(){
+  // 先缓存本地
+  localStorage.setItem('qb_cache',JSON.stringify(bank));
+  // 写入云端
+  fetch(BLOB).then(function(r){return r.json()}).then(function(d){
+    d.questionBank=bank;
+    return fetch(BLOB,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+  }).then(function(){
+    setStatus('已保存',true);
+    renderTopics(Object.keys(bank).sort());
+    renderList();
+  }).catch(function(){
+    setStatus('保存失败，数据已本地缓存',false);
+    renderTopics(Object.keys(bank).sort());
+    renderList();
+  });
+}
+
+function importSeed(){
+  if(!confirm('导入预设题库（集合1+集合2共30题）？\n如果云端已有题目会被覆盖。'))return;
+  bank=JSON.parse(JSON.stringify(seedBank));
+  curTopic='集合1';
+  saveBank();
+}
+
+function exportBank(){
+  var json=JSON.stringify(bank,null,2);
+  var b=new Blob([json],{type:'application/json'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');
+  a.href=u;a.download='题库备份_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();
+}
+
+refresh();
+</script>
+</body>
+</html>

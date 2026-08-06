@@ -65,9 +65,26 @@ function skip(){if(answers[questions[idx].id]===undefined)answers[questions[idx]
 function updateStats(){if(!questions.length){['tq','tc','tw','tp'].forEach(function(id){document.getElementById(id).textContent=id==='tp'?'0%':'0'});return}var t=Object.keys(answers).filter(function(k){return answers[k]>=0}).length;var c=Object.keys(answers).filter(function(k){return answers[k]===questions.find(function(q){return q.id==k}).answer}).length;document.getElementById('tq').textContent=questions.length;document.getElementById('tc').textContent=c;document.getElementById('tw').textContent=t-c;document.getElementById('tp').textContent=Math.round(t/questions.length*100)+'%'}
 function finish(){done=true;questions.forEach(function(q){if(answers[q.id]===undefined)answers[q.id]=-1});var correct=questions.filter(function(q){return answers[q.id]===q.answer}).length;var total=questions.length,pct=Math.round(correct/total*100);var name=document.getElementById('sname').value.trim()||localStorage.getItem('ws_name')||'未填写';var wrongDetails=[];questions.forEach(function(q,i){var ua=answers[q.id];if(ua!==q.answer&&ua!==-1)wrongDetails.push({num:i+1,text:q.text,userAnswer:ua>=0?q.options[ua]:'未作答',correctAnswer:q.options[q.answer],tag:q.tag})});var allHtml='';questions.forEach(function(q,i){var ua=answers[q.id],ok=ua===q.answer;var svg=q.svg?'<div class="qsvg">'+q.svg+'</div>':'';allHtml+='<div class="qcard"><div class="qnum" style="background:'+(ok?'var(--green)':'var(--red)')+'">第'+(i+1)+'题 '+(ok?'✅':'❌')+'</div>'+svg+'<div class="qtxt">'+q.text+'</div><div class="opts">'+q.options.map(function(o,j){return'<div class="opt'+(j===q.answer?' ok':'')+(j===ua&&ua!==q.answer?' bad':'')+'" style="pointer-events:none"><div class="cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>'}).join('')+'</div><div class="fb show '+(ok?'ok':'bad')+'">'+(ok?'✅ 正确！':'❌ 知识点：'+(q.tag||'未标注'))+'</div></div>'});document.getElementById('qarea').innerHTML=allHtml;document.getElementById('qbtns').innerHTML='';var panel=document.getElementById('rpanel');panel.style.display='block';document.getElementById('rem').textContent=pct>=90?'🏆':pct>=70?'👍':pct>=50?'📖':'💪';document.getElementById('rsc').innerHTML='<span style="color:'+(pct>=80?'var(--green)':pct>=60?'var(--yellow)':'var(--red)')+'">'+correct+'</span> / '+total;document.getElementById('rmsg').textContent=pct>=90?'太棒了！':pct>=70?'不错！':pct>=50?'还需努力':'要认真复习';updateStats();submitCloud(name,correct,total,pct,wrongDetails)}
 function submitCloud(name,correct,total,pct,wrongDetails){var rec={type:'quiz',studentName:name,date:new Date().toISOString().split('T')[0],topic:topicLabels[topic]||topic,topicKey:topic,correct:correct,total:total,pct:pct,wrongDetails:wrongDetails,level:'senior',time:new Date().toLocaleString('zh-CN')};fetch(BLOB).then(function(r){return r.json()}).then(function(d){if(!d.items)d.items=[];d.items.unshift(rec);return fetch(BLOB,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)})}).then(function(){document.getElementById('rmsg').textContent+='\n✅ 已自动提交！'}).catch(function(){document.getElementById('rmsg').textContent+='\n⚠️ 提交失败，请重试'})}
-function renderTopics(){var bar=document.getElementById('topicBar');bar.innerHTML='';var keys=Object.keys(banks).filter(function(k){return banks[k].length>0});if(!keys.length){bar.innerHTML='<span style="color:var(--muted);font-size:.85em">暂无题目，等待老师添加</span>';document.getElementById('qarea').innerHTML='';document.getElementById('qbtns').innerHTML='';return}keys.forEach(function(k,i){var b=document.createElement('button');b.className='tbtn'+(i===0?' on':'');b.textContent=topicLabels[k]||k;b.addEventListener('click',function(){document.querySelectorAll('.tbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');topic=k;restart()});bar.appendChild(b)});if(keys.length>0){topic=keys[0];restart()}}
+function renderTopics(){var bar=document.getElementById('topicBar');bar.innerHTML='';var keys=Object.keys(banks).filter(function(k){return banks[k].length>0});if(!keys.length){bar.innerHTML='<span style="color:var(--muted);font-size:.85em">暂无题目，等待老师添加</span>';document.getElementById('qarea').innerHTML='';document.getElementById('qbtns').innerHTML='';return}keys.forEach(function(k,i){var b=document.createElement('button');b.className='tbtn'+(i===0?' on':'');b.textContent=(topicLabels[k]||k)+' ('+banks[k].length+')';b.addEventListener('click',function(){document.querySelectorAll('.tbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');topic=k;restart()});bar.appendChild(b)});if(keys.length>0){topic=keys[0];restart()}}
 function restart(){questions=shuffle(banks[topic]||[]);idx=0;answers={};done=false;document.getElementById('rpanel').style.display='none';if(questions.length)renderQ();updateStats()}
-renderTopics();
+// 从云端加载题库（老师通过题库管理页面添加的题）
+function loadBanks(){
+  fetch(BLOB).then(function(r){return r.json()}).then(function(d){
+    var cloudBank=d.questionBank;
+    if(cloudBank&&Object.keys(cloudBank).length>0){
+      // 云端题库覆盖本地（云端优先），但保留本地题库中没有的专题
+      Object.keys(cloudBank).forEach(function(k){
+        banks[k]=cloudBank[k];
+        if(!topicLabels[k]) topicLabels[k]=k;
+      });
+    }
+    renderTopics();
+  }).catch(function(){
+    // 网络失败，用本地题库
+    renderTopics();
+  });
+}
+loadBanks();
 </script>
 </body>
 </html>

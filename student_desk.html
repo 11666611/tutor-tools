@@ -88,7 +88,22 @@ function findRemedy(tag){
     if(tag.indexOf(keys[i])>=0||keys[i].indexOf(tag)>=0) return remedyBank[keys[i]];
   }
   // Fallback: 泛例题
-  return [{q:'关于"'+tag+'"的例题：请回顾相关概念，重点理解定义和典型题型。',opts:['已理解','还需复习'],ans:0,exp:'建议回顾课本对应章节，重做错题。'}];
+  return null;
+}
+// 从云端题库中匹配同知识点题目作为巩固例题
+function findRemedyFromCloud(tag,questionBank){
+  var matches=[];
+  if(!questionBank) return matches;
+  Object.keys(questionBank).forEach(function(topic){
+    var qs=questionBank[topic]||[];
+    qs.forEach(function(q){
+      if(q.tag===tag||(q.tag&&tag&&(q.tag.indexOf(tag)>=0||tag.indexOf(q.tag)>=0))){
+        matches.push({q:q.text,opts:q.options,ans:q.answer,exp:'知识点：'+(q.tag||topic),tag:q.tag,source:'cloud'});
+      }
+    });
+  });
+  return matches;
+}
 }
 
 // 错题巩固 state
@@ -100,11 +115,13 @@ window.openPractice=function(fromWeak){
     var items=d.items||[];
     var qi=items.filter(function(e){return e.type==='quiz'&&e.studentName===name});
     var wt={};qi.forEach(function(q){if(!q.wrongDetails)return;q.wrongDetails.forEach(function(w){var t=w.tag||'其他';wt[t]=(wt[t]||0)+1})});
+    var qBank=d.questionBank||{};
     var sw=Object.keys(wt).sort(function(a,b){return wt[b]-wt[a]});
-    // 为每个薄弱知识点取例题
+    // 为每个薄弱知识点取例题，优先从云端题库匹配
     var allQs=[];
     sw.forEach(function(tag){
-      var qs=findRemedy(tag);
+      var qs=findRemedyFromCloud(tag,qBank);
+      if(!qs.length) qs=[{q:'关于"'+tag+'"的例题：请回顾相关概念。',opts:['已理解','还需复习'],ans:0,exp:'建议回顾课本对应章节，重做错题。'}];
       // 最多每个知识点取2题
       qs.slice(0,2).forEach(function(q,i){
         allQs.push({tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i});
@@ -301,16 +318,21 @@ window.markReview=function(id,status){
 
 // 从错题本直接打开特定知识点的巩固练习
 window.openPracticeForTag=function(tag){
-  var qs=findRemedy(tag);
-  var allQs=qs.slice(0,2).map(function(q,i){
-    return {tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_tag_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i};
-  });
-  practiceState={questions:allQs,answers:{},finished:false};
-  document.getElementById('practiceSubtitle').textContent='针对「'+tag+'」生成 '+allQs.length+' 道例题';
-  document.getElementById('practiceScore').classList.remove('show');
-  renderPractice();
-  document.getElementById('practiceOverlay').classList.add('show');
-  document.body.style.overflow='hidden';
+  fetch(BLOB).then(function(r){return r.json()}).then(function(d){
+    var qBank=d.questionBank||{};
+    var qs=findRemedyFromCloud(tag,qBank);
+    if(!qs.length) qs=findRemedy(tag)||[];
+    if(!qs.length) qs=[{q:'关于"'+tag+'"的例题：请回顾相关概念。',opts:['已理解','还需复习'],ans:0,exp:'建议回顾课本对应章节。'}];
+    var allQs=qs.slice(0,2).map(function(q,i){
+      return {tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_tag_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i};
+    });
+    practiceState={questions:allQs,answers:{},finished:false};
+    document.getElementById('practiceSubtitle').textContent='针对「'+tag+'」生成 '+allQs.length+' 道例题';
+    document.getElementById('practiceScore').classList.remove('show');
+    renderPractice();
+    document.getElementById('practiceOverlay').classList.add('show');
+    document.body.style.overflow='hidden';
+  }).catch(function(){alert('加载失败，请重试');});
 };
 
 var currentTab='mastery';

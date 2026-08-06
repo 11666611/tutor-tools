@@ -117,7 +117,7 @@ function switchTopic(t){curTopic=t;renderTopics(Object.keys(bank).sort());render
 function newTopic(){
   var t=document.getElementById('newTopicInput');
   if(t.style.display==='none'||!t.style.display){
-    t.style.display='inline-block';t.focus();return;
+    t.style.display='inline-block';t.value='';t.focus();return;
   }
   var v=t.value.trim();
   t.style.display='none';t.value='';

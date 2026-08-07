@@ -42,6 +42,7 @@
 var BLOB=localStorage.getItem('blob_url')||'https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63'
 var name=localStorage.getItem('ws_name')||'学生';var role=localStorage.getItem('ws_role');if(role!=='student')location.href='index.html';document.getElementById('uname').textContent=name;
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+	function safeText(s){return esc(s).replace(/&lt;i&gt;/g,'<i>').replace(/&lt;/i&gt;/g,'</i>').replace(/&lt;sub&gt;/g,'<sub>').replace(/&lt;/sub&gt;/g,'</sub>').replace(/&lt;sup&gt;/g,'<sup>').replace(/&lt;/sup&gt;/g,'</sup>').replace(/&lt;br&gt;/g,'<br>').replace(/&lt;br/&gt;/g,'<br>')}
 // 错题巩固题库：每个知识点对应多道交互式例题
 var remedyBank={
 '空集的定义与判定':[
@@ -161,7 +162,7 @@ function renderPractice(){
     var type=q.type||'choice';
     html+='<div class="practice-q">';
     html+='<span class="pq-tag tag tag-orange">'+esc(q.tag||'例题')+'</span>';
-    html+='<div class="pq-text"><b>第'+(i+1)+'题.</b> '+esc(q.text)+'</div>';
+    html+='<div class="pq-text"><b>第'+(i+1)+'题.</b> '+safeText(q.text)+'</div>';
     if(type==='choice'){
       if(q.opts.length>1){
         html+='<div class="pq-opts">'+q.opts.map(function(o,j){
@@ -238,7 +239,7 @@ function checkPracticeDone(){
   document.getElementById('practiceScore').scrollIntoView({behavior:'smooth'});
 }
 
-function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],type=q.type||'choice';var ok=ua===q.ans||ua==='self-right';html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+esc(q.tag||'例题')+'</span><div class="pq-text">'+esc(q.text)+'</div>';if(type==='choice'){html+='<div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+esc(o)+'</span></div>'}).join('')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+esc(q.exp||'')+'</div>'}else{html+='<div style="margin-top:6px;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:'+(ok?'rgba(46,204,113,.06)':'rgba(231,76,60,.06)')+'">✅ <b>'+esc(q.ans)+'</b>'+(q.solution?'<br><small style="color:var(--muted)">📝 '+esc(q.solution)+'</small>':'')+'</div>';html+='<div style="font-size:.85em;margin-top:4px;color:'+(ok?'var(--accent)':'var(--red)')+'">'+(ok?'✅ 自评：做对了':'❌ 自评：还需复习')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+esc(q.exp||'')+'</div>'}html+='</div>'});return html}
+function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],type=q.type||'choice';var ok=ua===q.ans||ua==='self-right';html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+esc(q.tag||'例题')+'</span><div class="pq-text">'+safeText(q.text)+'</div>';if(type==='choice'){html+='<div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+esc(o)+'</span></div>'}).join('')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+esc(q.exp||'')+'</div>'}else{html+='<div style="margin-top:6px;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:'+(ok?'rgba(46,204,113,.06)':'rgba(231,76,60,.06)')+'">✅ <b>'+esc(q.ans)+'</b>'+(q.solution?'<br><small style="color:var(--muted)">📝 '+esc(q.solution)+'</small>':'')+'</div>';html+='<div style="font-size:.85em;margin-top:4px;color:'+(ok?'var(--accent)':'var(--red)')+'">'+(ok?'✅ 自评：做对了':'❌ 自评：还需复习')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+esc(q.exp||'')+'</div>'}html+='</div>'});return html}
 // ========== 错题本 ==========
 var mistakeFilter='全部';
 var REVIEW_KEY='mistake_review';

@@ -69,6 +69,7 @@
 var BLOB=localStorage.getItem('blob_url')||'https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63';
 var bank={};
 var curTopic='';
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // 预设题库（从 math_practice.html 同步）
 var seedBank={
@@ -199,17 +200,17 @@ function renderList(){
     var opts=q.options||[];
     var letters=['A','B','C','D'];
     h+='<div class="q-card">';
-    h+='<div class="q-top"><span class="q-num">#'+(i+1)+'</span><span class="q-tag">'+q.tag+'</span>'+typeBadge+'</div>';
-    h+='<div class="q-text">'+q.text+'</div>';
+    h+='<div class="q-top"><span class="q-num">#'+(i+1)+'</span><span class="q-tag">'+esc(q.tag)+'</span>'+typeBadge+'</div>';
+    h+='<div class="q-text">'+esc(q.text)+'</div>';
     if(type==='choice'&&opts.length){
-      h+='<div class="q-opts">'+opts.map(function(o,j){return letters[j]+'. '+o}).join('&nbsp;&nbsp;|&nbsp;&nbsp;')+'</div>';
+      h+='<div class="q-opts">'+opts.map(function(o,j){return letters[j]+'. '+esc(o)}).join('&nbsp;&nbsp;|&nbsp;&nbsp;')+'</div>';
       var ansLetter=q.answer>=0&&q.answer<4?letters[q.answer]:'?';
-      h+='<div class="q-ans">✅ 答案：'+ansLetter+' — '+opts[q.answer]+'</div>';
+      h+='<div class="q-ans">✅ 答案：'+ansLetter+' — '+esc(opts[q.answer])+'</div>';
     }else if(type==='fill'){
-      h+='<div class="q-ans">✅ 正确答案：'+q.answer+'</div>';
+      h+='<div class="q-ans">✅ 正确答案：'+esc(q.answer)+'</div>';
     }else if(type==='solution'){
-      h+='<div class="q-ans">✅ 参考答案：'+q.answer+'</div>';
-      if(q.solution) h+='<div class="q-sol">📝 解析：'+q.solution+'</div>';
+      h+='<div class="q-ans">✅ 参考答案：'+esc(q.answer)+'</div>';
+      if(q.solution) h+='<div class="q-sol">📝 解析：'+esc(q.solution)+'</div>';
     }
     h+='<div class="q-acts"><button class="btn-xs" onclick="editQ(\''+q.id+'\')">✏️ 编辑</button><button class="btn-xs del" onclick="deleteQ(\''+q.id+'\')">🗑 删除</button></div>';
     h+='</div>';

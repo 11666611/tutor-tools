@@ -175,14 +175,16 @@ function renderPractice(){
         html+='<button class="btn btn-sm" style="margin-top:8px" onclick="markDone(\''+q.id+'\')">'+q.opts[0]+'</button>';
       }
       html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 正确答案是 <b>'+'ABCD'[q.ans]+'</b>')+'<br>'+q.exp:'')+'</div>';
-    }else if(type==='fill'){
-      html+='<div style="margin-top:8px"><input type="text" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid '+(answered?(isRight?'var(--accent)':'var(--red)'):'var(--border)')+';font-size:.88em;font-family:inherit;background:var(--card);color:var(--text)" value="'+(typeof ans[q.id]==='string'?ans[q.id].replace(/"/g,'&quot;'):'')+'" '+(answered?'disabled':'')+' id="pfill_'+i+'"></div>';
-      if(!answered) html+='<button class="btn btn-sm" style="margin-top:6px" onclick="commitPFill('+i+')">确认</button>';
-      html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 正确答案：<b>'+q.ans+'</b>')+'<br>'+q.exp:'')+'</div>';
-    }else if(type==='solution'){
-      html+='<div style="margin-top:8px"><textarea style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid '+(answered?(isRight?'var(--accent)':'var(--red)'):'var(--border)')+';font-size:.88em;font-family:inherit;background:var(--card);color:var(--text);resize:vertical;min-height:60px" '+(answered?'disabled':'')+' id="psol_'+i+'">'+(typeof ans[q.id]==='string'?ans[q.id]:'')+'</textarea></div>';
-      if(!answered) html+='<button class="btn btn-sm" style="margin-top:6px" onclick="commitPSol('+i+')">提交</button>';
-      html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 参考答案：<b>'+q.ans+'</b>')+(q.solution?'<br><small>📝 '+q.solution+'</small>':'')+'<br>'+q.exp:'')+'</div>';
+    }else if(type==='fill'||type==='solution'){
+      var revealed=ans[q.id]==='self-right'||ans[q.id]==='self-wrong';
+      var selfOk=ans[q.id]==='self-right';
+      if(!revealed){
+        html+='<button class="btn btn-sm" style="margin-top:8px" onclick="revealPractice('+i+')">💡 查看答案</button>';
+      }else{
+        html+='<div style="margin-top:8px;padding:10px 14px;border-radius:8px;border:1.5px solid '+(selfOk?'var(--accent)':'var(--red)')+';font-size:.88em;background:'+(selfOk?'rgba(46,204,113,.06)':'rgba(231,76,60,.06)')+'">✅ <b>'+q.ans+'</b>'+(q.solution?'<br><small style="color:var(--muted)">📝 '+q.solution+'</small>':'')+'</div>';
+        html+='<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-sm" style="background:var(--accent);color:#fff" onclick="selfPractice('+i+',\'self-right\')">✅ 我做对了</button><button class="btn btn-sm" style="background:var(--red);color:#fff" onclick="selfPractice('+i+',\'self-wrong\')">❌ 还需复习</button></div>';
+        html+='<div class="pq-fb show '+(selfOk?'good':'bad')+'">'+(selfOk?'✅ 自评：做对了':'❌ 自评：还需复习')+'<br>'+q.exp+'</div>';
+      }
     }
     html+='</div>';
   });
@@ -199,21 +201,16 @@ function renderPractice(){
   });
 }
 
-window.commitPFill=function(i){
+window.revealPractice=function(i){
   var q=practiceState.questions[i];
   if(practiceState.answers[q.id]!==undefined) return;
-  var el=document.getElementById('pfill_'+i);
-  if(!el||!el.value.trim()){alert('请输入答案');return}
-  practiceState.answers[q.id]=el.value.trim();
+  practiceState.answers[q.id]='revealed';
   renderPractice();
-  checkPracticeDone();
 };
-window.commitPSol=function(i){
+window.selfPractice=function(i,v){
   var q=practiceState.questions[i];
-  if(practiceState.answers[q.id]!==undefined) return;
-  var el=document.getElementById('psol_'+i);
-  if(!el||!el.value.trim()){alert('请输入答案');return}
-  practiceState.answers[q.id]=el.value.trim();
+  if(practiceState.answers[q.id]==='self-right'||practiceState.answers[q.id]==='self-wrong') return;
+  practiceState.answers[q.id]=v;
   renderPractice();
   checkPracticeDone();
 };
@@ -225,12 +222,13 @@ window.markDone=function(id){
 
 function checkPracticeDone(){
   var qs=practiceState.questions;
-  var allDone=qs.every(function(q){return practiceState.answers[q.id]!==undefined});
+  var allDone=qs.every(function(q){var ua=practiceState.answers[q.id];return ua!==undefined&&ua!=='revealed'});
   if(!allDone||practiceState.finished) return;
   practiceState.finished=true;
   var correct=0,total=qs.length;
   qs.forEach(function(q){
-    if(practiceState.answers[q.id]===q.ans) correct++;
+    var ua=practiceState.answers[q.id];
+    if(ua===q.ans||ua==='self-right') correct++;
   });
   var pct=total?Math.round(correct/total*100):0;
   document.getElementById('psBig').innerHTML='<span style="color:'+(pct>=80?'var(--accent)':pct>=60?'var(--orange)':'var(--red)')+'">'+correct+'</span> / '+total;
@@ -239,7 +237,7 @@ function checkPracticeDone(){
   document.getElementById('practiceScore').scrollIntoView({behavior:'smooth'});
 }
 
-function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],ok=ua===q.ans;var type=q.type||'choice';html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+(q.tag||'例题')+'</span><div class="pq-text">'+q.text+'</div>';if(type==='choice'){html+='<div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>'}).join('')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+q.exp+'</div>'}else if(type==='fill'){html+='<div style="margin-top:6px"><input type="text" style="width:100%;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:var(--card);color:var(--text)" value="'+(typeof ua==='string'?ua.replace(/"/g,'&quot;'):'未作答')+'" disabled></div>';html+='<div style="font-size:.82em;margin-top:4px;color:var(--accent)">✅ 正确答案：'+q.ans+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+q.exp+'</div>'}else if(type==='solution'){html+='<div style="margin-top:6px"><textarea style="width:100%;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:var(--card);color:var(--text);resize:vertical;min-height:50px" disabled>'+(typeof ua==='string'?ua:'未作答')+'</textarea></div>';html+='<div style="font-size:.82em;margin-top:4px;color:var(--accent)">✅ 参考答案：'+q.ans+'</div>';if(q.solution)html+='<div style="font-size:.8em;margin-top:2px;color:var(--muted)">📝 '+q.solution+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+q.exp+'</div>'}html+='</div>'});return html}
+function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],type=q.type||'choice';var ok=ua===q.ans||ua==='self-right';html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+(q.tag||'例题')+'</span><div class="pq-text">'+q.text+'</div>';if(type==='choice'){html+='<div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>'}).join('')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+q.exp+'</div>'}else{html+='<div style="margin-top:6px;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:'+(ok?'rgba(46,204,113,.06)':'rgba(231,76,60,.06)')+'">✅ <b>'+q.ans+'</b>'+(q.solution?'<br><small style="color:var(--muted)">📝 '+q.solution+'</small>':'')+'</div>';html+='<div style="font-size:.85em;margin-top:4px;color:'+(ok?'var(--accent)':'var(--red)')+'">'+(ok?'✅ 自评：做对了':'❌ 自评：还需复习')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+q.exp+'</div>'}html+='</div>'});return html}
 // ========== 错题本 ==========
 var mistakeFilter='全部';
 var REVIEW_KEY='mistake_review';

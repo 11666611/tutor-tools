@@ -17,7 +17,7 @@
 <div id="qarea"></div><div class="btn-bar" id="qbtns"></div>
 <div class="result" id="rpanel"><div class="big" id="rem"></div><div class="sc" id="rsc"></div><div class="msg" id="rmsg"></div><button class="btn btn-go" onclick="restart()">重新练习</button></div></div>
 <script>
-var BLOB='https://jsonblob.com/api/jsonBlob/019fd2b7-4376-7e01-aad8-0390e6b2fbce'
+var BLOB=localStorage.getItem('blob_url')||'https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63'
 var banks={'有理数':[],'整式与因式分解':[],'一元一次方程':[],'二元一次方程组':[],'不等式与不等式组':[],'平面直角坐标系':[],'一次函数':[],'三角形':[],'全等三角形':[],'勾股定理':[],'四边形':[],
 '圆':[],'相似':[],'二次函数':[],'统计与概率':[]};
 var topic='',questions=[],idx=0,answers={},done=false;

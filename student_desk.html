@@ -39,7 +39,7 @@
 </div>
 
 <script>
-var BLOB='https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63'
+var BLOB=localStorage.getItem('blob_url')||'https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63'
 var name=localStorage.getItem('ws_name')||'学生';var role=localStorage.getItem('ws_role');if(role!=='student')location.href='index.html';document.getElementById('uname').textContent=name;
 // 错题巩固题库：每个知识点对应多道交互式例题
 var remedyBank={

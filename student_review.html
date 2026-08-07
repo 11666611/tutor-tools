@@ -19,7 +19,7 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var BLOB='https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63'
+var BLOB=localStorage.getItem('blob_url')||'https://jsonblob.com/api/jsonBlob/019fdab4-ce1e-7630-a111-3e1600fd8f63'
 var ms=0,fs=0,diff='',hw='';
 document.getElementById('dt').value=new Date().toISOString().split('T')[0];
 function bindStars(id,setter,labelId,labels){var c=document.getElementById(id);c.querySelectorAll('.star').forEach(function(s){s.addEventListener('click',function(){var v=parseInt(this.dataset.v);setter(v);c.querySelectorAll('.star').forEach(function(x,i){x.classList.toggle('on',i<v)});document.getElementById(labelId).textContent=labels[v-1]})})}

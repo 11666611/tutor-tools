@@ -102,7 +102,7 @@ function loadBanks(){
     if(cloudBank&&Object.keys(cloudBank).length>0){
       // 云端题库覆盖本地（云端优先），但保留本地题库中没有的专题
       Object.keys(cloudBank).forEach(function(k){
-        banks[k]=cloudBank[k];
+        if(!banks[k]){banks[k]=cloudBank[k]}
         if(!topicLabels[k]) topicLabels[k]=k;
       });
     }

@@ -355,7 +355,7 @@ window.openPracticeForTag=function(tag){
     if(!qs.length) qs=findRemedy(tag)||[];
     if(!qs.length) qs=[{q:'关于"'+tag+'"的例题：请回顾相关概念。',opts:['已理解','还需复习'],ans:0,exp:'建议回顾课本对应章节。'}];
     var allQs=qs.slice(0,2).map(function(q,i){
-      return {tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_tag_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i};
+      return {tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_tag_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i,type:q.type||'choice',solution:q.solution};
     });
     practiceState={questions:allQs,answers:{},finished:false};
     document.getElementById('practiceSubtitle').textContent='针对「'+tag+'」生成 '+allQs.length+' 道例题';

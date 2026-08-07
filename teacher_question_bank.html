@@ -6,7 +6,7 @@
 <title>题库管理</title>
 <script>MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['$$','$$'],['\\[','\\]']]}}</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
-<style>:root{--bg:#0a0a14;--card:rgba(255,255,255,.03);--blue:#5b9cf5;--green:#4ade80;--orange:#fb923c;--red:#f87171;--purple:#a78bfa;--text:#e2e8f0;--muted:#94a3b8;--border:rgba(255,255,255,.08);--radius:14px}*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(135deg,#0a0a14,#141028,#0a1428);color:var(--text);min-height:100vh;padding:16px}.wrap{max-width:800px;margin:0 auto}.header{text-align:center;padding:16px 0}.header h1{font-size:1.4em;font-weight:800}.header p{color:var(--muted);font-size:.8em;margin-top:4px}.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}.btn{padding:9px 18px;border-radius:20px;cursor:pointer;font-weight:700;font-size:.82em;border:none;font-family:inherit;transition:all .15s;min-height:38px}.btn:active{transform:scale(.96)}.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(91,156,245,.2)}.btn-green{background:var(--green);color:#000}.btn-red{background:0 0;color:var(--red);border:2px solid var(--red)}.btn-ghost{background:0 0;color:var(--muted);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--blue);color:#fff}.topics{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center}.tbtn{padding:7px 16px;border-radius:18px;cursor:pointer;font-size:.8em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.tbtn:hover{border-color:var(--blue);color:#fff}.tbtn.on{background:var(--blue);color:#fff;border-color:var(--blue)}.tbtn-new{border-style:dashed}.info-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.82em;color:var(--muted)}.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:8px;backdrop-filter:blur(10px)}.q-card .q-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}.q-card .q-num{font-weight:700;font-size:.85em;color:var(--blue)}.q-card .q-tag{display:inline-block;padding:2px 10px;border-radius:8px;font-size:.72em;font-weight:600;background:rgba(167,139,250,.12);color:var(--purple)}.q-card .q-text{font-size:.9em;margin:8px 0;line-height:1.6}.q-card .q-opts{font-size:.82em;color:var(--muted);line-height:1.7;margin-bottom:6px}.q-card .q-ans{font-size:.82em;font-weight:600;color:var(--green)}.q-card .q-acts{display:flex;gap:6px;margin-top:10px}.btn-xs{padding:4px 12px;border-radius:12px;cursor:pointer;font-size:.73em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.btn-xs:hover{border-color:var(--blue);color:var(--blue)}.btn-xs.del:hover{border-color:var(--red);color:var(--red)}.form-card{background:rgba(91,156,245,.04);border:1px solid rgba(91,156,245,.15);border-radius:var(--radius);padding:20px;margin-top:16px;display:none}.form-card.show{display:block}.form-card h3{font-size:.95em;margin-bottom:14px;color:var(--blue)}.form-row{margin-bottom:12px}.form-row label{display:block;font-size:.78em;font-weight:600;color:var(--muted);margin-bottom:4px}.form-row input,.form-row textarea,.form-row select{width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:.88em;font-family:inherit;resize:vertical}.form-row textarea{min-height:60px}.form-row input:focus,.form-row textarea:focus,.form-row select:focus{outline:none;border-color:var(--blue)}.form-acts{display:flex;gap:8px;margin-top:14px}.empty{text-align:center;padding:40px;color:var(--muted)}.status{font-size:.76em;padding:6px 14px;border-radius:14px}.status.ok{background:rgba(74,222,128,.12);color:var(--green)}.status.err{background:rgba(248,113,113,.12);color:var(--red)}@media(max-width:480px){.q-card{padding:12px}.form-card{padding:14px}}</style>
+<style>:root{--bg:#0a0a14;--card:rgba(255,255,255,.03);--blue:#5b9cf5;--green:#4ade80;--orange:#fb923c;--red:#f87171;--purple:#a78bfa;--text:#e2e8f0;--muted:#94a3b8;--border:rgba(255,255,255,.08);--radius:14px}*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(135deg,#0a0a14,#141028,#0a1428);color:var(--text);min-height:100vh;padding:16px}.wrap{max-width:800px;margin:0 auto}.header{text-align:center;padding:16px 0}.header h1{font-size:1.4em;font-weight:800}.header p{color:var(--muted);font-size:.8em;margin-top:4px}.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}.btn{padding:9px 18px;border-radius:20px;cursor:pointer;font-weight:700;font-size:.82em;border:none;font-family:inherit;transition:all .15s;min-height:38px}.btn:active{transform:scale(.96)}.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(91,156,245,.2)}.btn-green{background:var(--green);color:#000}.btn-red{background:0 0;color:var(--red);border:2px solid var(--red)}.btn-ghost{background:0 0;color:var(--muted);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--blue);color:#fff}.topics{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center}.tbtn{padding:7px 16px;border-radius:18px;cursor:pointer;font-size:.8em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.tbtn:hover{border-color:var(--blue);color:#fff}.tbtn.on{background:var(--blue);color:#fff;border-color:var(--blue)}.tbtn-new{border-style:dashed}.info-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.82em;color:var(--muted)}.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:8px;backdrop-filter:blur(10px)}.q-card .q-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}.q-card .q-num{font-weight:700;font-size:.85em;color:var(--blue)}.q-card .q-tag{display:inline-block;padding:2px 10px;border-radius:8px;font-size:.72em;font-weight:600;background:rgba(167,139,250,.12);color:var(--purple)}.q-card .q-text{font-size:.9em;margin:8px 0;line-height:1.6}.q-card .q-opts{font-size:.82em;color:var(--muted);line-height:1.7;margin-bottom:6px}.q-card .q-ans{font-size:.82em;font-weight:600;color:var(--green)}.q-card .q-acts{display:flex;gap:6px;margin-top:10px}.btn-xs{padding:4px 12px;border-radius:12px;cursor:pointer;font-size:.73em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);transition:all .15s;font-family:inherit}.btn-xs:hover{border-color:var(--blue);color:var(--blue)}.btn-xs.del:hover{border-color:var(--red);color:var(--red)}.form-card{background:rgba(91,156,245,.04);border:1px solid rgba(91,156,245,.15);border-radius:var(--radius);padding:20px;margin-top:16px;display:none}.form-card.show{display:block}.form-card h3{font-size:.95em;margin-bottom:14px;color:var(--blue)}.form-row{margin-bottom:12px}.form-row label{display:block;font-size:.78em;font-weight:600;color:var(--muted);margin-bottom:4px}.form-row input,.form-row textarea,.form-row select{width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:.88em;font-family:inherit;resize:vertical}.form-row textarea{min-height:60px}.form-row input:focus,.form-row textarea:focus,.form-row select:focus{outline:none;border-color:var(--blue)}.form-acts{display:flex;gap:8px;margin-top:14px}.empty{text-align:center;padding:40px;color:var(--muted)}.status{font-size:.76em;padding:6px 14px;border-radius:14px}.status.ok{background:rgba(74,222,128,.12);color:var(--green)}.status.err{background:rgba(248,113,113,.12);color:var(--red)}.type-sel{display:flex;gap:6px;margin-bottom:12px}.type-btn{padding:6px 14px;border-radius:14px;cursor:pointer;font-size:.78em;font-weight:600;border:1.5px solid var(--border);background:0 0;color:var(--muted);font-family:inherit;transition:all .15s}.type-btn:hover{border-color:var(--blue);color:#fff}.type-btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}.q-type-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7em;font-weight:600}.q-type-badge.choice{background:rgba(91,156,245,.12);color:var(--blue)}.q-type-badge.fill{background:rgba(251,146,60,.12);color:var(--orange)}.q-type-badge.solution{background:rgba(167,139,250,.12);color:var(--purple)}@media(max-width:480px){.q-card{padding:12px}.form-card{padding:14px}}</style>
 </head>
 <body>
 <div class="wrap">
@@ -25,13 +25,24 @@
 <div class="form-card" id="formCard">
   <h3 id="formTitle">添加题目</h3>
   <div class="form-row"><label>知识点标签</label><input type="text" id="ftag" placeholder="如：子集个数公式·2ⁿ"></div>
+  <div class="form-row"><label>题型</label><div class="type-sel" id="typeSel"><button class="type-btn on" data-t="choice" id="tbtn_choice">🔤 选择题</button><button class="type-btn" data-t="fill" id="tbtn_fill">✏️ 填空题</button><button class="type-btn" data-t="solution" id="tbtn_solution">📝 解答题</button></div></div>
   <div class="form-row"><label>题目文本</label><textarea id="ftext" placeholder="输入题目内容"></textarea></div>
-  <div class="form-row"><label>选项 A</label><input type="text" id="foptA" placeholder="A选项内容"></div>
-  <div class="form-row"><label>选项 B</label><input type="text" id="foptB" placeholder="B选项内容"></div>
-  <div class="form-row"><label>选项 C</label><input type="text" id="foptC" placeholder="C选项内容（可选）"></div>
-  <div class="form-row"><label>选项 D</label><input type="text" id="foptD" placeholder="D选项内容（可选）"></div>
-  <div class="form-row"><label>正确答案</label><select id="fans"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>
+  <div id="choiceFields">
+    <div class="form-row"><label>选项 A</label><input type="text" id="foptA" placeholder="A选项内容"></div>
+    <div class="form-row"><label>选项 B</label><input type="text" id="foptB" placeholder="B选项内容"></div>
+    <div class="form-row"><label>选项 C</label><input type="text" id="foptC" placeholder="C选项内容（可选）"></div>
+    <div class="form-row"><label>选项 D</label><input type="text" id="foptD" placeholder="D选项内容（可选）"></div>
+    <div class="form-row"><label>正确答案</label><select id="fans"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>
+  </div>
+  <div id="fillFields" style="display:none">
+    <div class="form-row"><label>正确答案</label><input type="text" id="ffillAns" placeholder="如：{(1,1)} 或 8或2"></div>
+  </div>
+  <div id="solutionFields" style="display:none">
+    <div class="form-row"><label>参考答案 / 关键步骤</label><textarea id="fsolAns" placeholder="参考答案或关键得分点"></textarea></div>
+    <div class="form-row"><label>详细解析（选填）</label><textarea id="fsolExp" placeholder="详细解题过程..."></textarea></div>
+  </div>
   <input type="hidden" id="feditId">
+  <input type="hidden" id="ftype" value="choice">
   <div class="form-acts"><button class="btn btn-blue" onclick="saveQ()">💾 保存</button><button class="btn btn-ghost" onclick="hideForm()">取消</button></div>
 </div>
 <!-- 批量导入弹窗 -->
@@ -49,7 +60,7 @@
     每道题之间用 <code>---</code> 分隔
   </div>
   <div class="form-row"><label>导入到专题</label><input type="text" id="batchTopic" style="width:100%"></div>
-  <div class="form-row"><label>粘贴题目内容</label><textarea id="batchText" style="min-height:200px;font-size:.82em;font-family:monospace" placeholder="题目：集合{1,2,3}的子集有几个？&#10;A. 6&#10;B. 7&#10;C. 8&#10;D. 9&#10;答案：C&#10;标签：子集个数公式&#10;---&#10;题目：下一道...&#10;A. ...&#10;答案：A&#10;标签：..."></textarea></div>
+  <div class="form-row"><label>粘贴题目内容</label><textarea id="batchText" style="min-height:200px;font-size:.82em;font-family:monospace" placeholder="类型：选择 / 填空 / 解答（选择题可省略此行）&#10;题目：集合{1,2,3}的子集有几个？&#10;A. 6&#10;B. 7&#10;C. 8&#10;D. 9&#10;答案：C&#10;标签：子集个数公式&#10;---&#10;类型：填空&#10;题目：集合{a,b,c,d,e}的子集共有____个。&#10;答案：32&#10;标签：子集个数公式&#10;---&#10;类型：解答&#10;题目：已知A={x|x²-3x+2=0}，B={1,2}，求证：A=B。&#10;答案：解方程得x=1或x=2，所以A={1,2}=B&#10;标签：集合相等的证明&#10;解析：第一步：解二次方程..."></textarea></div>
   <div id="batchPreview" style="font-size:.8em;margin-bottom:12px"></div>
   <div class="form-acts"><button class="btn btn-green" onclick="doBatchImport()">📋 解析并导入</button><button class="btn btn-ghost" onclick="hideBatch()">取消</button></div>
 </div>
@@ -94,7 +105,17 @@ var seedBank={
 {id:'h28',tag:'绝对值不等式·集合计数',text:'A={x∈Z| |x²-5x+6|≤2}，则A中元素个数为？',options:['2','3','4','5'],answer:2},
 {id:'h29',tag:'含参·子集关系求范围',text:'A={x|x²-(a+1)x+a≤0}，B={x|x²-5x+4≤0}。若A⊆B，则a的取值范围是？',options:['[1,4]','[0,4]','[1,3]','[0,3]'],answer:0},
 {id:'h30',tag:'集合划分·计数',text:'非空集合A,B,C两两不相交，且A∪B∪C={1,2,3,4,5,6}。若|A|=|B|=|C|，则满足条件的(A,B,C)有多少组？',options:['15','30','60','90'],answer:3}
-]
+  ],
+  '集合3':[
+    {id:'h31',tag:'集合的表示法',text:'用列举法表示集合 {x∈N | 2<x≤6}：________',type:'fill',options:[],answer:'{3,4,5,6}'},
+    {id:'h32',tag:'子集个数公式',text:'集合 {a,b,c,d,e} 的子集共有 ________ 个。',type:'fill',options:[],answer:'32'},
+    {id:'h33',tag:'集合运算·交集',text:'已知 A={1,2,3,4}，B={3,4,5,6}，则 A∩B = ________。',type:'fill',options:[],answer:'{3,4}'},
+    {id:'h34',tag:'补集运算',text:'U={1,2,3,4,5}，A={1,3}，则 ∁ᵤA = ________。',type:'fill',options:[],answer:'{2,4,5}'},
+    {id:'h35',tag:'集合相等的证明',text:'已知 A={x|x²−3x+2=0}，B={1,2}，求证：A=B。',type:'solution',options:[],answer:'解方程 x²−3x+2=0 得 x=1 或 x=2，所以 A={1,2}=B。',solution:'第一步：解二次方程 x²−3x+2=0，因式分解得 (x−1)(x−2)=0，解得 x₁=1，x₂=2。\n第二步：故 A={1,2}。\n第三步：B={1,2}，所以 A=B。'},
+    {id:'h36',tag:'子集关系的证明',text:'求证：空集是任何集合的子集。即对于任意集合 A，∅⊆A。',type:'solution',options:[],answer:'反证法：假设∅不是A的子集，则存在元素 x∈∅ 但 x∉A。但∅中没有元素，矛盾。故∅⊆A。',solution:'使用反证法。假设 ∅⊈A，则根据子集定义的否定，存在某个元素 x 使得 x∈∅ 且 x∉A。然而，空集∅不包含任何元素，这样的 x 不存在，产生矛盾。因此假设不成立，必有 ∅⊆A。'},
+    {id:'h37',tag:'集合运算·容斥原理应用',text:'某班有 50 名学生，参加数学竞赛的有 28 人，参加物理竞赛的有 24 人，两科都参加的有 10 人。求两科都不参加的人数。',type:'solution',options:[],answer:'两科都不参加的有 8 人。',solution:'设参加数学的为集合 M，参加物理的为集合 P。\n|M∪P| = |M| + |P| − |M∩P| = 28 + 24 − 10 = 42\n两科都不参加 = 总人数 − |M∪P| = 50 − 42 = 8 人。'},
+    {id:'h38',tag:'含参集合·分类讨论',text:'已知集合 A={x|ax²+2x+1=0}，若 A 中只有一个元素，求实数 a 的值。',type:'solution',options:[],answer:'a=0 或 a=1。',solution:'分类讨论：\n(1) 当 a=0 时，方程为 2x+1=0，解得 x=−1/2，A为单元素集，a=0 满足。\n(2) 当 a≠0 时，方程为二次方程，A为单元素集等价于判别式 Δ=0：Δ=4−4a=0，解得 a=1。\n综上，a=0 或 a=1。'}
+  ]
 };
 
 function setStatus(msg,ok){var el=document.getElementById('sync');el.textContent=msg;el.className='status '+(ok?'ok':'err')}
@@ -150,6 +171,19 @@ function renderTopics(topics){
 
 function switchTopic(t){curTopic=t;renderTopics(Object.keys(bank).sort());renderList()}
 
+	// 题型切换
+	function setFormType(type){
+	  document.getElementById('ftype').value=type;
+	  document.querySelectorAll('#typeSel .type-btn').forEach(function(b){b.classList.toggle('on',b.dataset.t===type)});
+	  document.getElementById('choiceFields').style.display=type==='choice'?'block':'none';
+	  document.getElementById('fillFields').style.display=type==='fill'?'block':'none';
+	  document.getElementById('solutionFields').style.display=type==='solution'?'block':'none';
+	}
+	// 绑定题型按钮
+	document.querySelectorAll('#typeSel .type-btn').forEach(function(b){
+	  b.addEventListener('click',function(){setFormType(this.dataset.t)});
+	});
+
 function renderList(){
   document.getElementById('topicInfo').textContent=curTopic||'请选择专题';
   var qs=bank[curTopic]||[];
@@ -160,16 +194,23 @@ function renderList(){
   }
   var h='';
   qs.forEach(function(q,i){
+    var type=q.type||'choice';
+    var typeBadge={'choice':'<span class="q-type-badge choice">选择题</span>','fill':'<span class="q-type-badge fill">填空题</span>','solution':'<span class="q-type-badge solution">解答题</span>'}[type]||'';
     var opts=q.options||[];
     var letters=['A','B','C','D'];
-    var ansLetter=q.answer>=0&&q.answer<4?letters[q.answer]:'?';
     h+='<div class="q-card">';
-    h+='<div class="q-top"><span class="q-num">#'+(i+1)+'</span><span class="q-tag">'+q.tag+'</span></div>';
+    h+='<div class="q-top"><span class="q-num">#'+(i+1)+'</span><span class="q-tag">'+q.tag+'</span>'+typeBadge+'</div>';
     h+='<div class="q-text">'+q.text+'</div>';
-    if(opts.length){
+    if(type==='choice'&&opts.length){
       h+='<div class="q-opts">'+opts.map(function(o,j){return letters[j]+'. '+o}).join('&nbsp;&nbsp;|&nbsp;&nbsp;')+'</div>';
+      var ansLetter=q.answer>=0&&q.answer<4?letters[q.answer]:'?';
+      h+='<div class="q-ans">✅ 答案：'+ansLetter+' — '+opts[q.answer]+'</div>';
+    }else if(type==='fill'){
+      h+='<div class="q-ans">✅ 正确答案：'+q.answer+'</div>';
+    }else if(type==='solution'){
+      h+='<div class="q-ans">✅ 参考答案：'+q.answer+'</div>';
+      if(q.solution) h+='<div class="q-sol">📝 解析：'+q.solution+'</div>';
     }
-    h+='<div class="q-ans">✅ 答案：'+ansLetter+(opts[ansLetter]?' — '+opts[ansLetter]:'')+'</div>';
     h+='<div class="q-acts"><button class="btn-xs" onclick="editQ(\''+q.id+'\')">✏️ 编辑</button><button class="btn-xs del" onclick="deleteQ(\''+q.id+'\')">🗑 删除</button></div>';
     h+='</div>';
   });
@@ -185,7 +226,11 @@ function showAddForm(){
   document.getElementById('foptC').value='';
   document.getElementById('foptD').value='';
   document.getElementById('fans').value='0';
+  document.getElementById('ffillAns').value='';
+  document.getElementById('fsolAns').value='';
+  document.getElementById('fsolExp').value='';
   document.getElementById('feditId').value='';
+  setFormType('choice');
   document.getElementById('formCard').classList.add('show');
   document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
 }
@@ -196,6 +241,7 @@ function editQ(id){
   var qs=bank[curTopic]||[];
   var q=qs.find(function(x){return x.id===id});
   if(!q)return;
+  var type=q.type||'choice';
   document.getElementById('formTitle').textContent='✏️ 编辑题目 — '+curTopic;
   document.getElementById('ftag').value=q.tag||'';
   document.getElementById('ftext').value=q.text||'';
@@ -204,8 +250,12 @@ function editQ(id){
   document.getElementById('foptB').value=opts[1]||'';
   document.getElementById('foptC').value=opts[2]||'';
   document.getElementById('foptD').value=opts[3]||'';
-  document.getElementById('fans').value=q.answer;
+  document.getElementById('fans').value=typeof q.answer==='number'?q.answer:0;
+  document.getElementById('ffillAns').value=type==='fill'?q.answer:'';
+  document.getElementById('fsolAns').value=type==='solution'?q.answer:'';
+  document.getElementById('fsolExp').value=q.solution||'';
   document.getElementById('feditId').value=id;
+  setFormType(type);
   document.getElementById('formCard').classList.add('show');
   document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
 }
@@ -213,28 +263,35 @@ function editQ(id){
 function saveQ(){
   var tag=document.getElementById('ftag').value.trim();
   var text=document.getElementById('ftext').value.trim();
-  var opts=[document.getElementById('foptA').value.trim(),document.getElementById('foptB').value.trim(),document.getElementById('foptC').value.trim(),document.getElementById('foptD').value.trim()];
-  var ans=parseInt(document.getElementById('fans').value);
-  var editId=document.getElementById('feditId').value;
+  var type=document.getElementById('ftype').value;
   if(!tag||!text){alert('请至少填写知识点标签和题目文本');return}
-  // 过滤空选项
-  opts=opts.filter(function(o){return o!==''});
-  if(opts.length<2){alert('请至少填写两个选项');return}
+  var opts=[], ans;
+  if(type==='choice'){
+    opts=[document.getElementById('foptA').value.trim(),document.getElementById('foptB').value.trim(),document.getElementById('foptC').value.trim(),document.getElementById('foptD').value.trim()];
+    opts=opts.filter(function(o){return o!==''});
+    if(opts.length<2){alert('请至少填写两个选项');return}
+    ans=parseInt(document.getElementById('fans').value);
+  }else if(type==='fill'){
+    ans=document.getElementById('ffillAns').value.trim();
+    if(!ans){alert('请填写正确答案');return}
+  }else if(type==='solution'){
+    ans=document.getElementById('fsolAns').value.trim();
+    if(!ans){alert('请填写参考答案');return}
+  }
+  var editId=document.getElementById('feditId').value;
 
   if(!bank[curTopic]) bank[curTopic]=[];
   var qs=bank[curTopic];
+  var qobj={tag:tag,text:text,type:type,options:opts,answer:ans};
+  if(type==='solution') qobj.solution=document.getElementById('fsolExp').value.trim();
 
   if(editId){
-    // 编辑模式
     var idx=qs.findIndex(function(x){return x.id===editId});
     if(idx>=0){
-      qs[idx].tag=tag;
-      qs[idx].text=text;
-      qs[idx].options=opts;
-      qs[idx].answer=ans;
+      qobj.id=editId;
+      qs[idx]=qobj;
     }
   }else{
-    // 新增模式
     var maxId=0;
     Object.values(bank).forEach(function(arr){
       arr.forEach(function(q){
@@ -242,7 +299,8 @@ function saveQ(){
         if(n>maxId)maxId=n;
       });
     });
-    qs.push({id:'q'+(maxId+1),tag:tag,text:text,options:opts,answer:ans});
+    qobj.id='q'+(maxId+1);
+    qs.push(qobj);
   }
   hideForm();
   saveBank();
@@ -314,17 +372,24 @@ function doBatchImport(){
   blocks.forEach(function(block){
     block=block.trim();if(!block)return;
     var lines=block.split(/[\r\n]+/).map(function(l){return l.trim()}).filter(function(l){return l});
-    var q={text:'',opts:[],answer:-1,tag:''};
+    var q={text:'',opts:[],answer:-1,tag:'',type:'choice',solution:''};
     lines.forEach(function(line){
       var m;
-      if(/^题目[：:]/.test(line)){q.text=line.replace(/^题目[：:]\s*/,'')}
+      if(/^类型[：:]/.test(line)){var t=line.replace(/^类型[：:]\s*/,'').trim();if(t.indexOf('填空')>=0)q.type='fill';else if(t.indexOf('解答')>=0)q.type='solution';else q.type='choice'}
+      else if(/^题目[：:]/.test(line)){q.text=line.replace(/^题目[：:]\s*/,'')}
       else if(/^[A-Da-d][.．、:：]\s*/.test(line)){var letter=line.charAt(0).toUpperCase();var content=line.replace(/^[A-Da-d][.．、:：]\s*/,'');if(letter==='A'||q.opts.length===0)q.opts.push(content);else if(letter==='B'||q.opts.length===1)q.opts.push(content);else if(letter==='C'||q.opts.length===2)q.opts.push(content);else if(letter==='D'||q.opts.length===3)q.opts.push(content)}
-      else if(/^答案[：:]/.test(line)){var a=line.replace(/^答案[：:]\s*/,'').trim().toUpperCase();q.answer='ABCD'.indexOf(a)}
+      else if(/^答案[：:]/.test(line)){var a=line.replace(/^答案[：:]\s*/,'').trim();q.answer=q.type==='choice'?'ABCD'.indexOf(a.toUpperCase()):a}
       else if(/^标签[：:]/.test(line)){q.tag=line.replace(/^标签[：:]\s*/,'').trim()}
-      else if(/^解析[：:]/.test(line)){q.exp=line.replace(/^解析[：:]\s*/,'').trim()}
+      else if(/^解析[：:]/.test(line)){q.solution=line.replace(/^解析[：:]\s*/,'').trim()}
       else if(!q.text&&line){q.text=line}
     });
-    if(q.text&&q.opts.length>=2&&q.answer>=0){
+    // 按题型验证
+    var valid=false;
+    var t=q.type||'choice';
+    if(t==='choice') valid=q.text&&q.opts.length>=2&&q.answer>=0;
+    else if(t==='fill') valid=q.text&&q.answer&&q.answer!==-1;
+    else if(t==='solution') valid=q.text&&q.answer&&q.answer!==-1;
+    if(valid){
       q.tag=q.tag||topic;
       parsed.push(q);
     }
@@ -335,7 +400,9 @@ function doBatchImport(){
   var maxId=0;
   Object.values(bank).forEach(function(arr){arr.forEach(function(q){var n=parseInt(q.id.replace(/[^0-9]/g,''));if(n>maxId)maxId=n;})});
   parsed.forEach(function(q,i){
-    bank[topic].push({id:'q'+(maxId+i+1),tag:q.tag,text:q.text,options:q.opts,answer:q.answer});
+    var entry={id:'q'+(maxId+i+1),tag:q.tag,text:q.text,type:q.type,options:q.opts,answer:q.answer};
+    if(q.solution) entry.solution=q.solution;
+    bank[topic].push(entry);
   });
   curTopic=topic;
   hideBatch();

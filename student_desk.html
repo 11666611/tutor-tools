@@ -100,7 +100,7 @@ function findRemedyFromCloud(tag,questionBank){
     var qs=questionBank[topic]||[];
     qs.forEach(function(q){
       if(q.tag===tag||(q.tag&&tag&&(q.tag.indexOf(tag)>=0||tag.indexOf(q.tag)>=0))){
-        matches.push({q:q.text,opts:q.options,ans:q.answer,exp:'知识点：'+(q.tag||topic),tag:q.tag,source:'cloud'});
+        matches.push({q:q.text,opts:q.options,ans:q.answer,exp:'知识点：'+(q.tag||topic),tag:q.tag,source:'cloud',type:q.type||'choice',solution:q.solution});
       }
     });
   });
@@ -126,7 +126,7 @@ window.openPractice=function(fromWeak){
       if(!qs.length) qs=[{q:'关于"'+tag+'"的例题：请回顾相关概念。',opts:['已理解','还需复习'],ans:0,exp:'建议回顾课本对应章节，重做错题。'}];
       // 最多每个知识点取2题
       qs.slice(0,2).forEach(function(q,i){
-        allQs.push({tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i});
+        allQs.push({tag:tag,text:q.q,opts:q.opts,ans:q.ans,exp:q.exp,id:'rm_'+tag.replace(/[^a-zA-Z0-9一-鿿]/g,'')+'_'+i,type:q.type||'choice',solution:q.solution});
       });
     });
     // 如果没有错题，给出提示
@@ -157,26 +157,37 @@ function renderPractice(){
   qs.forEach(function(q,i){
     var answered=ans[q.id]!==undefined;
     var isRight=ans[q.id]===q.ans;
+    var type=q.type||'choice';
     html+='<div class="practice-q">';
     html+='<span class="pq-tag tag tag-orange">'+(q.tag||'例题')+'</span>';
     html+='<div class="pq-text"><b>第'+(i+1)+'题.</b> '+q.text+'</div>';
-    if(q.opts.length>1){
-      html+='<div class="pq-opts">'+q.opts.map(function(o,j){
-        var cls='';
-        if(answered){
-          if(j===q.ans) cls=' right';
-          else if(j===ans[q.id]&&!isRight) cls=' wrong';
-        }else if(ans[q.id]===j) cls=' chosen';
-        return '<div class="pq-opt'+cls+'" data-i="'+i+'" data-j="'+j+'" '+(answered?'style="pointer-events:none"':'')+'><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>';
-      }).join('')+'</div>';
-    }else{
-      html+='<button class="btn btn-sm" style="margin-top:8px" onclick="markDone(\''+q.id+'\')">'+q.opts[0]+'</button>';
+    if(type==='choice'){
+      if(q.opts.length>1){
+        html+='<div class="pq-opts">'+q.opts.map(function(o,j){
+          var cls='';
+          if(answered){
+            if(j===q.ans) cls=' right';
+            else if(j===ans[q.id]&&!isRight) cls=' wrong';
+          }else if(ans[q.id]===j) cls=' chosen';
+          return '<div class="pq-opt'+cls+'" data-i="'+i+'" data-j="'+j+'" '+(answered?'style="pointer-events:none"':'')+'><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>';
+        }).join('')+'</div>';
+      }else{
+        html+='<button class="btn btn-sm" style="margin-top:8px" onclick="markDone(\''+q.id+'\')">'+q.opts[0]+'</button>';
+      }
+      html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 正确答案是 <b>'+'ABCD'[q.ans]+'</b>')+'<br>'+q.exp:'')+'</div>';
+    }else if(type==='fill'){
+      html+='<div style="margin-top:8px"><input type="text" style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid '+(answered?(isRight?'var(--accent)':'var(--red)'):'var(--border)')+';font-size:.88em;font-family:inherit;background:var(--card);color:var(--text)" value="'+(typeof ans[q.id]==='string'?ans[q.id].replace(/"/g,'&quot;'):'')+'" '+(answered?'disabled':'')+' id="pfill_'+i+'"></div>';
+      if(!answered) html+='<button class="btn btn-sm" style="margin-top:6px" onclick="commitPFill('+i+')">确认</button>';
+      html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 正确答案：<b>'+q.ans+'</b>')+'<br>'+q.exp:'')+'</div>';
+    }else if(type==='solution'){
+      html+='<div style="margin-top:8px"><textarea style="width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid '+(answered?(isRight?'var(--accent)':'var(--red)'):'var(--border)')+';font-size:.88em;font-family:inherit;background:var(--card);color:var(--text);resize:vertical;min-height:60px" '+(answered?'disabled':'')+' id="psol_'+i+'">'+(typeof ans[q.id]==='string'?ans[q.id]:'')+'</textarea></div>';
+      if(!answered) html+='<button class="btn btn-sm" style="margin-top:6px" onclick="commitPSol('+i+')">提交</button>';
+      html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 参考答案：<b>'+q.ans+'</b>')+(q.solution?'<br><small>📝 '+q.solution+'</small>':'')+'<br>'+q.exp:'')+'</div>';
     }
-    html+='<div class="pq-fb'+(answered?' show '+(isRight?'good':'bad'):'')+'">'+(answered?(isRight?'✅ 正确！':'❌ 正确答案是 <b>'+'ABCD'[q.ans]+'</b>')+'<br>'+q.exp:'')+'</div>';
     html+='</div>';
   });
   document.getElementById('practiceContent').innerHTML=html;
-  // bind clicks
+  // bind choice clicks
   document.querySelectorAll('.pq-opt').forEach(function(el){
     el.addEventListener('click',function(){
       var i=parseInt(el.dataset.i),j=parseInt(el.dataset.j);
@@ -188,6 +199,24 @@ function renderPractice(){
   });
 }
 
+window.commitPFill=function(i){
+  var q=practiceState.questions[i];
+  if(practiceState.answers[q.id]!==undefined) return;
+  var el=document.getElementById('pfill_'+i);
+  if(!el||!el.value.trim()){alert('请输入答案');return}
+  practiceState.answers[q.id]=el.value.trim();
+  renderPractice();
+  checkPracticeDone();
+};
+window.commitPSol=function(i){
+  var q=practiceState.questions[i];
+  if(practiceState.answers[q.id]!==undefined) return;
+  var el=document.getElementById('psol_'+i);
+  if(!el||!el.value.trim()){alert('请输入答案');return}
+  practiceState.answers[q.id]=el.value.trim();
+  renderPractice();
+  checkPracticeDone();
+};
 window.markDone=function(id){
   practiceState.answers[id]=-1;
   renderPractice();
@@ -199,9 +228,9 @@ function checkPracticeDone(){
   var allDone=qs.every(function(q){return practiceState.answers[q.id]!==undefined});
   if(!allDone||practiceState.finished) return;
   practiceState.finished=true;
-  var correct=0,total=0;
+  var correct=0,total=qs.length;
   qs.forEach(function(q){
-    if(q.opts.length>1){total++;if(practiceState.answers[q.id]===q.ans) correct++;}
+    if(practiceState.answers[q.id]===q.ans) correct++;
   });
   var pct=total?Math.round(correct/total*100):0;
   document.getElementById('psBig').innerHTML='<span style="color:'+(pct>=80?'var(--accent)':pct>=60?'var(--orange)':'var(--red)')+'">'+correct+'</span> / '+total;
@@ -210,7 +239,7 @@ function checkPracticeDone(){
   document.getElementById('practiceScore').scrollIntoView({behavior:'smooth'});
 }
 
-function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],ok=ua===q.ans;html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+(q.tag||'例题')+'</span><div class="pq-text">'+q.text+'</div><div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>'}).join('')+'</div><div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+q.exp+'</div></div>'});return html}
+function showPracticeSummary(){var qs=practiceState.questions;var html='';qs.forEach(function(q,i){var ua=practiceState.answers[q.id],ok=ua===q.ans;var type=q.type||'choice';html+='<div class="practice-q"><span class="pq-tag tag '+(ok?'tag-green':'tag-red')+'">'+(q.tag||'例题')+'</span><div class="pq-text">'+q.text+'</div>';if(type==='choice'){html+='<div class="pq-opts">'+q.opts.map(function(o,j){return'<div class="pq-opt'+(j===q.ans?' right':'')+(j===ua&&!ok?' wrong':'')+'" style="pointer-events:none"><div class="pq-cir">'+'ABCD'[j]+'</div><span>'+o+'</span></div>'}).join('')+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 答案：'+'ABCD'[q.ans])+' — '+q.exp+'</div>'}else if(type==='fill'){html+='<div style="margin-top:6px"><input type="text" style="width:100%;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:var(--card);color:var(--text)" value="'+(typeof ua==='string'?ua.replace(/"/g,'&quot;'):'未作答')+'" disabled></div>';html+='<div style="font-size:.82em;margin-top:4px;color:var(--accent)">✅ 正确答案：'+q.ans+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+q.exp+'</div>'}else if(type==='solution'){html+='<div style="margin-top:6px"><textarea style="width:100%;padding:8px 12px;border-radius:8px;border:1.5px solid '+(ok?'var(--accent)':'var(--red)')+';font-size:.85em;background:var(--card);color:var(--text);resize:vertical;min-height:50px" disabled>'+(typeof ua==='string'?ua:'未作答')+'</textarea></div>';html+='<div style="font-size:.82em;margin-top:4px;color:var(--accent)">✅ 参考答案：'+q.ans+'</div>';if(q.solution)html+='<div style="font-size:.8em;margin-top:2px;color:var(--muted)">📝 '+q.solution+'</div>';html+='<div class="pq-fb show '+(ok?'good':'bad')+'">'+(ok?'✅ 正确！':'❌ 需要加强')+' — '+q.exp+'</div>'}html+='</div>'});return html}
 // ========== 错题本 ==========
 var mistakeFilter='全部';
 var REVIEW_KEY='mistake_review';

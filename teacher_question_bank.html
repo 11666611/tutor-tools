@@ -145,6 +145,12 @@ function refresh(){
     return d;
   }).then(function(d){
     bank=d.questionBank||{};
+    // 合并本地seedBank：如果本地题目更多，以本地为准
+    Object.keys(seedBank).forEach(function(k){
+      if(!bank[k]||bank[k].length<seedBank[k].length){
+        bank[k]=JSON.parse(JSON.stringify(seedBank[k]));
+      }
+    });
     var topics=Object.keys(bank).sort();
     if(!curTopic||!bank[curTopic]) curTopic=topics[0]||'';
     renderTopics(topics);
